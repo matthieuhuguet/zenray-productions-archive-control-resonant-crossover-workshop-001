@@ -1,0 +1,10 @@
+INFO (DeviceD3D12.hpp:251) - D3D12::AMD Compatibility Mode - Using ID3D12Device14
+WARNING (DeviceD3D12.hpp:255) - D3D12::AMD Compatibility Mode - nri::DeviceD3D12::Create(): ID3D12Device version is lower than expected, some functionality may be not available...
+WARNING (DeviceD3D12.hpp:568) - D3D12::AMD Compatibility Mode - nri::DeviceD3D12::FillDesc(): ID3D12Device::CheckFeatureSupport(options22) failed, result = 0x80070057!
+WARNING (DeviceD3D12.hpp:580) - D3D12::AMD Compatibility Mode - nri::DeviceD3D12::FillDesc(): ID3D12Device::CheckFeatureSupport(tightAlignment) failed, result = 0x80070057!
+wine: Unhandled page fault on execute access to 0000000000000B38 at address 0000000000000B38 (thread 0170), starting debugger...
+01fc:err:cxcompatdb:verify_file invalid signature
+0204:err:cxcompatdb:verify_file invalid signature
+0204:fixme:keyboard:NtUserActivateKeyboardLayout Changing user locale is not supported
+01fc:fixme:keyboard:NtUserActivateKeyboardLayout Changing user locale is not supported
+01fc:fixme:thread:get_thread_times not implemented on this platform

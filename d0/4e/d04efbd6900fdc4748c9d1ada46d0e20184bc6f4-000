@@ -16,3 +16,8 @@
 
 - Disabling frame generation leaves the defect unchanged according to Matthieu; the new screenshot still shows saturated colored windows and light spilling into fog and ground. This rules against frame generation as the sole cause in this tested scene, not against all reconstruction defects. (3 October 2026)
 - Next isolated live test: SDF Reflections Off in the game menu; do not restart or edit files while the game runs. Evidence: WindowsFrameGenerationOff.png and FrameGenerationOffEvidence.json. (3 October 2026)
+
+## Test SDF sans amélioration (3 October 2026)
+
+- Matthieu constate « sdf ne change rien » et fournit une capture où les fenêtres restent vertes et multicolores. Désactiver les réflexions SDF ne suffit pas à corriger le défaut. Preuve : `/Users/zenray/.claude/tmp/tmp-control-resonant-crossover/SdfOffEvidence.json`. (3 October 2026)
+- Prochain essai isolé : restaurer SDF High, puis désactiver seulement Screen Space Reflections (SSR) et comparer les mêmes fenêtres ; ne pas fermer le jeu. (3 October 2026)
