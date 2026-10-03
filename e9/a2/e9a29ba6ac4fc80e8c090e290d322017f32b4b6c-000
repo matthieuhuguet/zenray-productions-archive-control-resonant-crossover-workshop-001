@@ -5,13 +5,14 @@
 #include <dlfcn.h>
 
 int main(int argc, char **argv) {
-    if (argc != 3) return 64;
+    if (argc < 3 || argc > 5) return 64;
     void *library = dlopen(argv[1], RTLD_NOW | RTLD_LOCAL);
     if (!library) { fprintf(stderr, "%s\n", dlerror()); return 65; }
     void *(*create_compiler)(void) = dlsym(library, "IRCompilerCreate");
     void *(*create_object)(const uint8_t *, size_t, int) = dlsym(library, "IRObjectCreateFromDXIL");
     void *(*compile_object)(void *, const char *, void *, void **) = dlsym(library, "IRCompilerAllocCompileAndLink");
     void (*validate)(void *, unsigned) = dlsym(library, "IRCompilerSetValidationFlags");
+    void (*compatibility)(void *, unsigned) = dlsym(library, "IRCompilerSetCompatibilityFlags");
     unsigned (*error_code)(void *) = dlsym(library, "IRErrorGetCode");
     void (*destroy_object)(void *) = dlsym(library, "IRObjectDestroy");
     void (*destroy_compiler)(void *) = dlsym(library, "IRCompilerDestroy");
@@ -28,7 +29,22 @@ int main(int argc, char **argv) {
     if (!input) { puts("{\"parsed\":false}"); free(data); return 2; }
     void *compiler = create_compiler(), *error = NULL;
     validate(compiler, 4);
+    if (argc >= 4 && compatibility) compatibility(compiler, (unsigned)strtoul(argv[3], NULL, 0));
     void *output = compile_object(compiler, NULL, input, &error);
+    if (output && argc == 5) {
+        int (*stage)(void *) = dlsym(library, "IRObjectGetMetalIRShaderStage");
+        void *(*binary_create)(void) = dlsym(library, "IRMetalLibBinaryCreate");
+        void (*binary_get)(void *, int, void *) = dlsym(library, "IRObjectGetMetalLibBinary");
+        size_t (*binary_size)(void *) = dlsym(library, "IRMetalLibGetBytecodeSize");
+        void (*binary_copy)(void *, void *) = dlsym(library, "IRMetalLibGetBytecode");
+        void (*binary_destroy)(void *) = dlsym(library, "IRMetalLibBinaryDestroy");
+        if (!stage || !binary_create || !binary_get || !binary_size || !binary_copy || !binary_destroy) return 70;
+        void *binary = binary_create(); binary_get(output, stage(output), binary);
+        size_t size = binary_size(binary); void *bytes = malloc(size);
+        binary_copy(binary, bytes); FILE *target = fopen(argv[4], "wb");
+        if (!target || fwrite(bytes, 1, size, target) != size) return 71;
+        fclose(target); free(bytes); binary_destroy(binary);
+    }
     printf("{\"parsed\":true,\"compiled\":%s,\"errorCode\":%u}\n",
         output ? "true" : "false", error ? error_code(error) : 0);
     if (output) destroy_object(output);

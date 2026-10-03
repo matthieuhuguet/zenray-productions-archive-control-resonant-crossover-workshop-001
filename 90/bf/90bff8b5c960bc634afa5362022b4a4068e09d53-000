@@ -1,0 +1,98 @@
+{
+  "baselineFlags": 447,
+  "experimentalFlags": 511,
+  "differenceBit": 64,
+  "results": [
+    {
+      "shader": "gpupipe_material-119363.dxil",
+      "modes": {
+        "447": {
+          "exitCode": 0,
+          "stdout": "{\"parsed\":true,\"compiled\":true,\"errorCode\":0}\n",
+          "size": 4040,
+          "sha256": "5cec7f7cfa94725ae4612bb338004f8ede0373255f348bb1574dc152565827cc"
+        },
+        "511": {
+          "exitCode": 0,
+          "stdout": "{\"parsed\":true,\"compiled\":true,\"errorCode\":0}\n",
+          "size": 4040,
+          "sha256": "5cec7f7cfa94725ae4612bb338004f8ede0373255f348bb1574dc152565827cc"
+        }
+      },
+      "bytecodeChanged": false
+    },
+    {
+      "shader": "gpupipe_material-131900.dxil",
+      "modes": {
+        "447": {
+          "exitCode": 0,
+          "stdout": "{\"parsed\":true,\"compiled\":true,\"errorCode\":0}\n",
+          "size": 5124,
+          "sha256": "2d0683561c0e59bf654e9bcb2cf2d9b607afe765624c8ed740370fdf3d9255bc"
+        },
+        "511": {
+          "exitCode": 0,
+          "stdout": "{\"parsed\":true,\"compiled\":true,\"errorCode\":0}\n",
+          "size": 5160,
+          "sha256": "9f08622948a74c6d45558ad445d26f616ca2b0be8d06e84198611ba69f5b128a"
+        }
+      },
+      "bytecodeChanged": true
+    },
+    {
+      "shader": "gpupipe_material-160667.dxil",
+      "modes": {
+        "447": {
+          "exitCode": 0,
+          "stdout": "{\"parsed\":true,\"compiled\":true,\"errorCode\":0}\n",
+          "size": 11940,
+          "sha256": "e22517c9bd21ec8e396e03572452c5ed2e2687be0917a6fd0637204bf8e7449e"
+        },
+        "511": {
+          "exitCode": 0,
+          "stdout": "{\"parsed\":true,\"compiled\":true,\"errorCode\":0}\n",
+          "size": 11980,
+          "sha256": "cca833fe3ab027d6eed02cbe2325f5b568ddc39d3afd646e01c733e216413687"
+        }
+      },
+      "bytecodeChanged": true
+    },
+    {
+      "shader": "gpupipe_material-175103.dxil",
+      "modes": {
+        "447": {
+          "exitCode": 0,
+          "stdout": "{\"parsed\":true,\"compiled\":true,\"errorCode\":0}\n",
+          "size": 4756,
+          "sha256": "2170c578505e08325cf52284e672f919aa6a07a062b76bdd2095a66368f95966"
+        },
+        "511": {
+          "exitCode": 0,
+          "stdout": "{\"parsed\":true,\"compiled\":true,\"errorCode\":0}\n",
+          "size": 4792,
+          "sha256": "a35eccd5d41ce7ece8f4de8df10cd67a0b000d05f8a5e656587a48af0423b8d2"
+        }
+      },
+      "bytecodeChanged": true
+    },
+    {
+      "shader": "gpupipe_material-178283.dxil",
+      "modes": {
+        "447": {
+          "exitCode": 0,
+          "stdout": "{\"parsed\":true,\"compiled\":true,\"errorCode\":0}\n",
+          "size": 4876,
+          "sha256": "8b96a4fd48d5ec7af6f21d47d62d9d8bcf635bc68a86eec7d34f917c1c3db12f"
+        },
+        "511": {
+          "exitCode": 0,
+          "stdout": "{\"parsed\":true,\"compiled\":true,\"errorCode\":0}\n",
+          "size": 4916,
+          "sha256": "e8c41be05bdb38846a18f3d24eacbbe198a9d9c3144eb8be4e709c7c5eeedba4"
+        }
+      },
+      "bytecodeChanged": true
+    }
+  ],
+  "visualVerified": false
+}

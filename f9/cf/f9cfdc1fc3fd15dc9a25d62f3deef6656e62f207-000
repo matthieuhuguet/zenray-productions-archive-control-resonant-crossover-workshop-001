@@ -1,0 +1,98 @@
+# 3 October 2026: reversible per-bottle compiler experiment; no automatic game launch.
+import argparse
+import datetime
+import hashlib
+import json
+from pathlib import Path
+import re
+import shutil
+import subprocess
+
+WORKSHOP = Path(__file__).resolve().parents[1]
+CONFIG = {
+    'bottle': Path('/Users/zenray/Library/Application Support/CrossOver/Bottles/Control Resonant'),
+    'cache': Path('/var/folders/r2/wh6ygv490dqbrs2mb51g39jm0000gn/C/d3dm/CONTROLResonant.exe/shaders.cache'),
+    'environment': {'CX_GRAPHICS_BACKEND': 'd3dmetal', 'D3DM_FORCE_RTZ_TEXWRITE': '1'},
+}
+MANIFEST = WORKSHOP / 'ShaderCompatibilityPatch.json'
+
+
+def digest(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def require_closed():
+    processes = subprocess.check_output(['ps', '-axo', 'comm='], text=True)
+    if any(x.strip().endswith('CONTROLResonant.exe') for x in processes.splitlines()):
+        raise RuntimeError('Close CONTROLResonant.exe before modifying configuration or cache')
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('action', choices=['apply', 'status', 'restore'])
+    args = parser.parse_args()
+    config = CONFIG['bottle'] / 'cxbottle.conf'
+    if args.action == 'status':
+        print(MANIFEST.read_text() if MANIFEST.exists() else '{"applied": false}')
+        return
+    require_closed()
+    if args.action == 'restore':
+        proof = json.loads(MANIFEST.read_text())
+        if not proof['applied']:
+            print('{"alreadyRestored": true}')
+            return
+        assert digest(config) == proof['configAfterSha256'], 'Bottle config changed; manual merge required'
+        shutil.copy2(proof['configBackup'], config)
+        cache = CONFIG['cache']
+        if cache.exists():
+            cache.rename(cache.with_name('shaders.cache-after-experiment-' + datetime.datetime.now().strftime('%Y%m%d-%H%M%S')))
+        if proof['cacheBackup']:
+            shutil.move(proof['cacheBackup'], cache)
+        proof['applied'] = False
+        proof['restoredAt'] = datetime.datetime.now().astimezone().isoformat()
+        MANIFEST.write_text(json.dumps(proof, indent=2) + '\n')
+        print('{"restored": true}')
+        return
+    if MANIFEST.exists() and json.loads(MANIFEST.read_text())['applied']:
+        print('{"alreadyApplied": true}')
+        return
+    stamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+    backup = WORKSHOP / 'backups' / ('shader-compatibility-' + stamp)
+    backup.mkdir(parents=True)
+    saved = backup / 'cxbottle.conf'
+    shutil.copy2(config, saved)
+    text = config.read_text()
+    match = re.search(r'(?ms)^\[EnvironmentVariables\]\s*\n(.*?)(?=^\[|\Z)', text)
+    assert match, 'Missing EnvironmentVariables section'
+    section = match.group(1)
+    for key, value in CONFIG['environment'].items():
+        line = '"' + key + '" = "' + value + '"'
+        pattern = r'(?m)^"' + re.escape(key) + r'"\s*=.*$'
+        if re.search(pattern, section):
+            section = re.sub(pattern, lambda _: line, section)
+        else:
+            section += '\n' + line + '\n'
+    text = text[:match.start(1)] + section + text[match.end(1):]
+    config.write_text(text)
+    assert config.read_text() == text
+    cache_backup = None
+    cache_files = []
+    if CONFIG['cache'].exists():
+        cache_files = [{'path': str(p.relative_to(CONFIG['cache'])), 'sha256': digest(p)}
+                       for p in CONFIG['cache'].rglob('*') if p.is_file()]
+        target = backup / 'shaders.cache'
+        shutil.move(CONFIG['cache'], target)
+        assert all(digest(target / p['path']) == p['sha256'] for p in cache_files)
+        cache_backup = str(target)
+    proof = {'applied': True, 'appliedAt': datetime.datetime.now().astimezone().isoformat(),
+             'environment': CONFIG['environment'], 'configBackup': str(saved),
+             'configBeforeSha256': digest(saved), 'configAfterSha256': digest(config),
+             'cacheBackup': cache_backup, 'cacheFiles': cache_files,
+             'gameLaunched': False, 'windowRenderingValidated': False,
+             'status': 'experimental-awaiting-visual-test'}
+    MANIFEST.write_text(json.dumps(proof, indent=2) + '\n')
+    print(json.dumps({k: proof[k] for k in ('applied', 'environment', 'cacheBackup', 'status')}))
+
+
+if __name__ == '__main__':
+    main()

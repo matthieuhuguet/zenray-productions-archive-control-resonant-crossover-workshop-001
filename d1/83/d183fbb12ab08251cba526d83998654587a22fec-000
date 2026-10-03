@@ -1,0 +1,90 @@
+# 3 October 2026: inspect DXIL containers without starting the game or altering its files.
+import argparse
+import collections
+import hashlib
+import json
+from pathlib import Path
+import struct
+import subprocess
+
+
+def inspect_container(data, start):
+    assert data[start:start + 4] == b'DXBC', 'bad magic'
+    assert start + 32 <= len(data), 'truncated header'
+    size, count = struct.unpack_from('<II', data, start + 24)
+    assert 0 < count <= 128 and 32 + count * 4 <= size, 'invalid table'
+    assert start + size <= len(data), 'truncated container'
+    tags = []
+    model = None
+    for index in range(count):
+        offset = struct.unpack_from('<I', data, start + 32 + index * 4)[0]
+        assert 32 + count * 4 <= offset <= size - 8, 'invalid chunk offset'
+        tag = data[start + offset:start + offset + 4]
+        length = struct.unpack_from('<I', data, start + offset + 4)[0]
+        assert offset + 8 + length <= size, 'truncated chunk'
+        tags.append(tag.decode('ascii'))
+        if tag == b'DXIL':
+            program, words = struct.unpack_from('<II', data, start + offset + 8)
+            assert length >= 24 and words * 4 <= length, 'invalid DXIL program'
+            assert data[start + offset + 16:start + offset + 20] == b'DXIL', 'invalid DXIL magic'
+            bitcode_offset, bitcode_size = struct.unpack_from('<II', data, start + offset + 24)
+            bitcode_start = start + offset + 16 + bitcode_offset
+            assert bitcode_start + bitcode_size <= start + offset + 8 + length, 'invalid LLVM bounds'
+            assert data[bitcode_start:bitcode_start + 4] == b'BC\xc0\xde', 'invalid LLVM magic'
+            model = {'stage': program >> 16, 'major': (program >> 4) & 15, 'minor': program & 15}
+    return {'size': size, 'chunks': tags, 'model': model}
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('shader_directory', type=Path)
+    parser.add_argument('output_directory', type=Path)
+    parser.add_argument('--probe', type=Path)
+    parser.add_argument('--converter', type=Path)
+    args = parser.parse_args()
+    args.output_directory.mkdir(parents=True, exist_ok=True)
+    files, containers, failures, probes = [], [], [], []
+    for path in sorted(args.shader_directory.glob('*.binrfx')):
+        data = path.read_bytes()
+        files.append({'name': path.name, 'sha256': hashlib.sha256(data).hexdigest()})
+        cursor = 0
+        while True:
+            start = data.find(b'DXBC', cursor)
+            if start < 0:
+                break
+            cursor = start + 4
+            try:
+                info = inspect_container(data, start)
+            except (AssertionError, struct.error, UnicodeError) as error:
+                failures.append({'file': path.name, 'offset': start, 'error': str(error)})
+                continue
+            cursor = start + info['size']
+            info.update({'file': path.name, 'offset': start})
+            containers.append(info)
+            if args.probe and path.name in ('standardmaterial.binrfx', 'gpupipe_material.binrfx'):
+                target = args.output_directory / (path.stem + '-' + str(start) + '.dxil')
+                target.write_bytes(data[start:cursor])
+                result = subprocess.run([str(args.probe), str(args.converter), str(target)],
+                                        capture_output=True, text=True, timeout=30)
+                probes.append({'file': target.name, 'exitCode': result.returncode,
+                               'stdout': result.stdout, 'stderr': result.stderr[:1000]})
+    first = next(args.shader_directory.glob('*.binrfx')).read_bytes()
+    offset = first.find(b'DXBC')
+    good = inspect_container(first, offset)
+    try:
+        inspect_container(first[:offset + good['size'] - 1], offset)
+        negative_passed = False
+    except AssertionError:
+        negative_passed = True
+    report = {'files': files, 'containerCount': len(containers), 'containers': containers,
+              'invalidCandidates': failures, 'compilerProbes': probes,
+              'negativeControlRejectedTruncation': negative_passed,
+              'models': dict(collections.Counter(str(x['model']) for x in containers)),
+              'gameStarted': False, 'renderValidated': False}
+    (args.output_directory / 'Audit.json').write_text(json.dumps(report, indent=2) + '\n')
+    print(json.dumps({k: report[k] for k in ('containerCount', 'invalidCandidates', 'models',
+                                          'negativeControlRejectedTruncation')}))
+
+
+if __name__ == '__main__':
+    main()

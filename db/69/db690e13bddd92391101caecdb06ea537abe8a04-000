@@ -1,0 +1,53 @@
+{
+  "applied": true,
+  "appliedAt": "2026-10-03T15:18:18.176132+02:00",
+  "environment": {
+    "CX_GRAPHICS_BACKEND": "d3dmetal",
+    "D3DM_FORCE_RTZ_TEXWRITE": "1"
+  },
+  "configBackup": "/Users/zenray/.claude/tmp/tmp-control-resonant-crossover/backups/shader-compatibility-20261003-151818/cxbottle.conf",
+  "configBeforeSha256": "fe32167548955dc2e1a726ff0e9e595c57721505dace0de7003fd8ca367c33c8",
+  "configAfterSha256": "c7b5fbf6e66ede2f2f47f59c14eeb6f9afa038b3ccbed415fc279e7213bf071a",
+  "cacheBackup": "/Users/zenray/.claude/tmp/tmp-control-resonant-crossover/backups/shader-compatibility-20261003-151818/shaders.cache",
+  "cacheFiles": [
+    {
+      "path": "MTLGPUFamilyApple10_0/bytecode_cache.bin",
+      "sha256": "7d7907a0fe3edd59e0c07dc1747fae0e25025b76e133f77eb9df9398f2c06d28"
+    },
+    {
+      "path": "MTLGPUFamilyApple10_0/rootsignature_cache.bin",
+      "sha256": "ef0685e8ba27c159f2fd744535fa52f94210906e82275b973104811fe6470eb2"
+    },
+    {
+      "path": "MTLGPUFamilyApple10_0/stage_cache.bin",
+      "sha256": "cc3e3d2fa00f8bb62ae0e1e280f4f1346a724e4b7a2437791f33a83b0c862227"
+    },
+    {
+      "path": "MTLGPUFamilyApple10_0/pipeline_cache.bin",
+      "sha256": "527699120042c6a325c6e3503aee42dc1a01fa9ddf7227be4cb4521bdaf85a61"
+    },
+    {
+      "path": "MTLGPUFamilyApple10_0/version.bin",
+      "sha256": "b75249e73bfaf1e92b304f0f8177a6c99d7117ad64496871ae83d7d8e99bf999"
+    },
+    {
+      "path": "32024/libraries.list",
+      "sha256": "49b756c664eb58e5c1832af6f8c6a6c4e6a9a951e74cd103478319ab8390e5bd"
+    },
+    {
+      "path": "32024/libraries.data",
+      "sha256": "9866196abbfeb729874686fba443e5e63b17921dd02fa9c6392c8a488cb66977"
+    },
+    {
+      "path": "16777235_355/functions.data",
+      "sha256": "3fcc2f042f47b48ac288ce6f5584aa00d6cfd38687516b8d20fdc266200b8e9a"
+    },
+    {
+      "path": "16777235_355/functions.list",
+      "sha256": "3b5c058d7eaaec97d821b906a0f460981f1517a80f6d7e5928315a9f685cc5a2"
+    }
+  ],
+  "gameLaunched": false,
+  "windowRenderingValidated": false,
+  "status": "experimental-awaiting-visual-test"
+}
