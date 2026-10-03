@@ -1,0 +1,18 @@
+# Remaining window artifacts (3 October 2026)
+
+- Current defect: cyan/magenta windows and vertical bright bands remain near Zoe. GIQuality 0 was an improvement in the first scene, not a complete fix or a controlled A/B proof. (3 October 2026)
+- Read-only inspection: game PID 43813 stays alive; D3DMetal 3.0 and its nvngx shim are loaded. On-disk settings: GI 0, SDF 2, SSR 3, DLSS frame generation 1. These are saved values, not a direct read of live renderer state. (3 October 2026)
+- Test 1, in the game menu: disable frame generation only, inspect the exact same windows without moving location; restore it if unchanged. This distinguishes generated-frame artifacts from base rendering. (3 October 2026)
+- Test 2, separately: vary SDF Reflections from current setting to Off, then restore if unchanged. The setting affects reflections even with RT off. Its effect on these windows is unproven. (3 October 2026)
+- Test 3, separately: vary Screen Space Reflections to Off. If unchanged, restore it and compare FSR with DLSS at comparable render resolution. Verify whether the game applies each change live or requests restart; do not restart this session. (3 October 2026)
+- Firsthand forum clue: https://forums.macrumors.com/threads/m6-gaming.2486520/page-2 reports broken windows with Handheld but not Low/Medium. This is another configuration, not proof for ours. (3 October 2026)
+- Primary benchmark: https://fps.tcno.co/controlresonant/ distinguishes GI, SDF and SSR; Handheld disables SDF. Our current SDF value is 2, so Handheld alone cannot explain the present defect. (3 October 2026)
+- Shader inventory: emission entry points exist in standardmaterial.binrfx and gpupipe_material.binrfx; SSR has separate opaque and transparent reflection resources. Names do not prove which shader produces the affected pixels. (3 October 2026)
+- Later compiler experiment: local D3DMetal contains D3DM_BOUNDS_CHECK, D3DM_SAMPLE_NAN_TO_ZERO and D3DM_FORCE_RTZ_TEXWRITE names. Semantics and effectiveness are unverified. No flags applied; initialization and shader-cache rebuild require a future controlled restart. (3 October 2026)
+- Actual cache is open under /var/folders/r2/wh6ygv490dqbrs2mb51g39jm0000gn/C/d3dm/CONTROLResonant.exe/shaders.cache/MTLGPUFamilyApple10_0. Never move this live cache. A future cache test must archive it while the game is closed, separately from other changes. (3 October 2026)
+- Evidence files: RemainingArtifactsRuntime.json, ShaderIdentifierEvidence.json, ReadOnlyFollowupEvidence.json, WindowsRemainingArtifacts.png and PartialFixCorrection.json. No visual success claim. (3 October 2026)
+
+## Frame generation test (3 October 2026)
+
+- Disabling frame generation leaves the defect unchanged according to Matthieu; the new screenshot still shows saturated colored windows and light spilling into fog and ground. This rules against frame generation as the sole cause in this tested scene, not against all reconstruction defects. (3 October 2026)
+- Next isolated live test: SDF Reflections Off in the game menu; do not restart or edit files while the game runs. Evidence: WindowsFrameGenerationOff.png and FrameGenerationOffEvidence.json. (3 October 2026)

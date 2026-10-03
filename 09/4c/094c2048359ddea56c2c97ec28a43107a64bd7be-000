@@ -1,0 +1,525 @@
+[
+  {
+    "shader": "lsao_filter.binrfx",
+    "size": 235195,
+    "sha256": "fed948516d4043e9bcaa89314631d0bf1d5f36ee2b50ae28df2081b8cf568d15",
+    "identifiers": [
+      "g_rwtReflectionsOpaque",
+      "g_rwtReflectionsTransparent",
+      "g_tReflectionNewOpaque",
+      "g_tReflectionNewOpaqueMips",
+      "g_tReflectionNewTransparent",
+      "g_tReflectionNewTransparentMips",
+      "g_tReflectionOldOpaque",
+      "g_tReflectionOldTransparent",
+      "jg_tReflectionNewOpaqueMips"
+    ]
+  },
+  {
+    "shader": "ssr.binrfx",
+    "size": 858886,
+    "sha256": "c047e43704280052c8ced43326cd0ac206d30f6a6e476abd1207f00afc323cc6",
+    "identifiers": [
+      "Ng_rwtReflectionMask",
+      "g_rwtReflectionDistance",
+      "g_rwtReflectionMask",
+      "g_rwtReflections",
+      "g_rwtReflectionsOpaque",
+      "g_rwtReflectionsTransparent",
+      "g_rwtReflectionsTransparentMask",
+      "g_tReflectionOldOpaque",
+      "g_tReflectionOldTransparent",
+      "g_tReflectionsCheckerboard",
+      "g_tReflectionsCheckerboardTransparentMask",
+      "include/sdf_reflections_ray.h",
+      "ng_rwtReflectionsTransparent"
+    ]
+  },
+  {
+    "shader": "lsao_filter2.binrfx",
+    "size": 28637,
+    "sha256": "a7c7e46c97bad5feeae8be1ca26435c0b290d1db8cda616aef7f4a6efff7b691",
+    "identifiers": [
+      "addReflectionWithBRDF",
+      "addReflectionWithBRDF_PS",
+      "addReflectionWithBRDF_VS",
+      "baddReflectionWithBRDF_PS",
+      "baddReflectionWithBRDF_VSD",
+      "g_rwtReflections",
+      "g_tReflectionRadianceInput",
+      "g_tReflectionsPreviousFrame",
+      "g_tReflectionsThisFrame"
+    ]
+  },
+  {
+    "shader": "rt_reflection_compute.binrfx",
+    "size": 2386749,
+    "sha256": "fd082059fde06d9f84e2321b2d13166a40d8b4afca69d9d162837fb7c67a23ae",
+    "identifiers": [
+      "BreflectionInline",
+      "JdeferredReflection",
+      "Nshared_rtreflection",
+      "Vg_rwtReflectionTarget",
+      "Zg_fRTReflectionAddRays",
+      "bg_fEnvReflectionMipCount",
+      "deferredReflection",
+      "deferredReflection4",
+      "deferredReflectionL",
+      "fEmissionFade",
+      "g_fClampReflectionIntensity",
+      "g_fEnvReflectionMipCount",
+      "g_fFogInReflectionsMinSmoothness",
+      "g_fFogInReflectionsMinSpecularAlbedo",
+      "g_fRTReflectionsMinSpecularAlbedo",
+      "g_rwtReflectionTarget",
+      "g_uRTReflectionRayCount",
+      "include/fog_reflection.h",
+      "include/raytracing_reflections.h",
+      "include/rt_reflection_ps5.h",
+      "jg_fEnvReflectionEdgeLength",
+      "ng_fClampReflectionIntensity",
+      "reflectionInline",
+      "reflectionInline ",
+      "reflectionInlineh",
+      "reflectionInlinel",
+      "rt_deferredReflection",
+      "rt_reflection_compute",
+      "rt_reflection_compute.luadl",
+      "rt_reflection_compute.rfx",
+      "rt_reflection_inline",
+      "rt_reflection_inline_clusters",
+      "shared_rtreflection",
+      "vEmission",
+      "vg_fRTReflectionsMinSmoothness"
+    ]
+  },
+  {
+    "shader": "decal.binrfx",
+    "size": 8476,
+    "sha256": "c1b6530618f1f365c0949b867bd73e118b50e2461b5a4572318efe557bffb6d4",
+    "identifiers": [
+      "Emission",
+      "Emission Intensity",
+      "Emission Map",
+      "Emission Multiplier",
+      "EmissionIntensity",
+      "EmissionMap",
+      "EmissionMultiplier",
+      "MATERIALID_EMISSION",
+      "emission"
+    ]
+  },
+  {
+    "shader": "deprecated_blendedmaterial.binrfx",
+    "size": 2521,
+    "sha256": "51200da33f7a0f9c02dbbca3cc61b61211297a6d557e1eb68f047b38eec33d83",
+    "identifiers": [
+      "EmissionMap"
+    ]
+  },
+  {
+    "shader": "billboard.binrfx",
+    "size": 1684,
+    "sha256": "6f1a261cd028dd71a4929fd19a15a2968035869fe6ac2701b8c4497ae377dcd7",
+    "identifiers": [
+      "EmissionMap"
+    ]
+  },
+  {
+    "shader": "gpupipe_transparent.binrfx",
+    "size": 269069,
+    "sha256": "bbf38434c23a2ddebd94649c6394dd260594f5722e10e86ef67a3d5234ec6b31",
+    "identifiers": [
+      "g_fTransparentReflectionEnvironmentCubeFactor",
+      "g_tReflectionMask"
+    ]
+  },
+  {
+    "shader": "layered.binrfx",
+    "size": 579811,
+    "sha256": "4b4eda6c7948c9210b5bdd801c8190394258b89e701d323329db1b41d0611e56",
+    "identifiers": [
+      "Emission",
+      "Emission Intensity",
+      "Emission Map",
+      "Emission Multiplier",
+      "EmissionIntensity",
+      "EmissionMap",
+      "EmissionMultiplier",
+      "MATERIALID_EMISSION",
+      "emission",
+      "include/emission.h",
+      "vEmission"
+    ]
+  },
+  {
+    "shader": "rt_transparent_compute.binrfx",
+    "size": 8625469,
+    "sha256": "31b05452bcb4811c718e53bc39244f423c26780000c4664c1f733513a7764db2",
+    "identifiers": [
+      "Ng_rwtReflectionMask",
+      "RC5ntransparentReflectionInline",
+      "bg_fEnvReflectionMipCount",
+      "fEmissionFade",
+      "g_fEnvReflectionMipCount",
+      "g_fFogInReflectionsMinDistanceInWorld",
+      "g_fFogInReflectionsMinSmoothness",
+      "g_fFogInReflectionsMinSpecularAlbedo",
+      "g_fTransparentReflectionMaxRoughness",
+      "g_rwtReflectionMask",
+      "g_tReflectionMask",
+      "include/fog_reflection.h",
+      "include/raytracing_reflections.h",
+      "include/rt_reflection_ps5.h",
+      "jg_fEnvReflectionEdgeLength",
+      "ntransparentReflectionInline",
+      "rt_transparent_reflection_inline ",
+      "rt_transparent_reflection_inline_clusters ",
+      "rt_transparent_reflection_resolve",
+      "rt_transparent_reflection_shading",
+      "rtransparentReflectionShading",
+      "transparentReflectionInline",
+      "transparentReflectionInline0",
+      "transparentReflectionInline4",
+      "transparentReflectionInlineH",
+      "transparentReflectionInlineT",
+      "transparentReflectionInlineX",
+      "transparentReflectionInlineh",
+      "transparentReflectionInlinel",
+      "transparentReflectionInlinep",
+      "transparentReflectionShading",
+      "transparentReflectionShadingP",
+      "vEmission"
+    ]
+  },
+  {
+    "shader": "skydome.binrfx",
+    "size": 45472,
+    "sha256": "ed0e4e3ceda563d5bb0efd3341326a8b9f36c5c830d95525b61ec89de600c780",
+    "identifiers": [
+      "Emission",
+      "Emission Intensity",
+      "Emission Map",
+      "Emission Multiplier",
+      "EmissionIntensity",
+      "EmissionMap",
+      "EmissionMultiplier",
+      "MATERIALID_EMISSION",
+      "emission",
+      "emissionPS",
+      "emissionPSD",
+      "include/emission.h"
+    ]
+  },
+  {
+    "shader": "particleline.binrfx",
+    "size": 258623,
+    "sha256": "6f49f87aad36de11262bda4ddab2d9c1605dca51651d285c73e917aae1e0cf1d",
+    "identifiers": [
+      "g_fFogInReflectionsMinDistanceInWorld"
+    ]
+  },
+  {
+    "shader": "eye.binrfx",
+    "size": 264850,
+    "sha256": "3a27e5f56e749d6498150a24044792532966cbb0f97d264a85e316b5fa3bd204",
+    "identifiers": [
+      "EmissionVertexAttributes",
+      "Fg_tReflectionMask",
+      "MATERIALID_EMISSION",
+      "MATERIALID_RETROREFLECTION_MASK",
+      "Retroreflection",
+      "Retroreflection Smoothness",
+      "RetroreflectionMask",
+      "RetroreflectionSmoothness",
+      "UEmissionVertexAttributes",
+      "emission",
+      "emissionMS",
+      "emissionMST",
+      "emissionPS",
+      "emissionPST",
+      "emissionVS",
+      "emissionVSDG",
+      "g_fTransparentReflectionEnvironmentCubeFactor",
+      "g_tReflectionMask",
+      "include/emission.h"
+    ]
+  },
+  {
+    "shader": "content_api.binrfx",
+    "size": 7900,
+    "sha256": "188292814c1449492126da47406d5f2f0e6a0e737ad7ab6e8bfb7b02a0554a37",
+    "identifiers": [
+      "include/content/nl_emission.h",
+      "include/emission.h"
+    ]
+  },
+  {
+    "shader": "rt_transparent_pt.binrfx",
+    "size": 10556359,
+    "sha256": "bf704664aada23830e85db8786afd30af78fa10bafe6f980a31c3818054b8f1c",
+    "identifiers": [
+      "Ng_rwtReflectionMask",
+      "bg_fEnvReflectionMipCount",
+      "fEmissionFade",
+      "g_fEnvReflectionMipCount",
+      "g_fFogInReflectionsMinDistanceInWorld",
+      "g_fFogInReflectionsMinSmoothness",
+      "g_fFogInReflectionsMinSpecularAlbedo",
+      "g_fIndirectDiffuseEmission",
+      "g_fTransparentReflectionMaxRoughness",
+      "g_rwtReflectionMask",
+      "include/fog_reflection.h",
+      "internal.addFogToReflection",
+      "jg_fEnvReflectionEdgeLength",
+      "jg_fIndirectDiffuseEmission",
+      "rt_transparent_reflection_pt ",
+      "rt_transparent_reflection_pt_clusters ",
+      "transparentReflectionRayGeneration",
+      "vEmission"
+    ]
+  },
+  {
+    "shader": "font.binrfx",
+    "size": 18291,
+    "sha256": "07ff13662eee5f56f8cc8c54cf2a8f5545b1c99d08eb1f775bc1239677732a69",
+    "identifiers": [
+      "sdfPSD",
+      "sdfVSD"
+    ]
+  },
+  {
+    "shader": "standardmaterial.binrfx",
+    "size": 208595,
+    "sha256": "52d37701c45cd0b59ba1cdbd7d454e97d1b38bd3ff5094c846a7e73fba1420c1",
+    "identifiers": [
+      "Emission",
+      "Emission Intensity",
+      "Emission Map",
+      "Emission Multiplier",
+      "EmissionIntensity",
+      "EmissionMap",
+      "EmissionMultiplier",
+      "MATERIALID_EMISSION",
+      "RaytracedReflection",
+      "emission",
+      "include/emission.h"
+    ]
+  },
+  {
+    "shader": "rt_reflection_ps5.binrfx",
+    "size": 46768,
+    "sha256": "dfb09f6e9aaad153955b24f776c9956d4b76ddd930684baac7bb2f5aa48931e6",
+    "identifiers": [
+      "NcomputeReflectionRT",
+      "Ng_rwtReflectionMask",
+      "computeReflectionRT",
+      "computeReflectionRTd/",
+      "g_fRTReflectionsMinSmoothness",
+      "g_fRTReflectionsMinSpecularAlbedo",
+      "g_rwtReflectionMask",
+      "include/raytracing_reflections.h",
+      "include/rt_reflection_ps5.h",
+      "rt_reflectionDeferredComputeSunShadow",
+      "rt_reflectionDeferredShadingCS",
+      "rt_reflection_ps5",
+      "rt_reflection_ps5.luadl",
+      "rt_reflection_ps5.rfx",
+      "rt_transparentReflectionTracing",
+      "rtransparentReflectionTracing",
+      "shared_rtreflection",
+      "transparentReflectionTracing",
+      "transparentReflectionTracing "
+    ]
+  },
+  {
+    "shader": "lsao.binrfx",
+    "size": 74389,
+    "sha256": "83a53115bd471833ed665c33f20d0c31bea4afccdd6a305673e5e8cd99c53928",
+    "identifiers": [
+      "Bg_tReflectionNew",
+      "add_reflections",
+      "add_reflections_PS",
+      "add_reflections_PSd",
+      "draw_reflections",
+      "draw_reflections_PS",
+      "g_tReflectionNew"
+    ]
+  },
+  {
+    "shader": "character.binrfx",
+    "size": 7972,
+    "sha256": "abf875cead70f36c22eb695cf693317ba2b6ac2216ade940f67b1bc7729ffb2e",
+    "identifiers": [
+      "Emission",
+      "EmissionIntensity",
+      "EmissionMap",
+      "EmissionMultiplier",
+      "RaytracedReflection"
+    ]
+  },
+  {
+    "shader": "hair.binrfx",
+    "size": 194098,
+    "sha256": "ca3f697b552df40b3c62e374d54d95fe79b208c2a2ebe17a714d897d05bf1eb7",
+    "identifiers": [
+      "MATERIALID_EMISSION",
+      "include/emission.h"
+    ]
+  },
+  {
+    "shader": "rt_pathtracing.binrfx",
+    "size": 23375129,
+    "sha256": "bb9c3c7016b279933006d4bc3cf35c480134959a1b720da369f6236521a58d86",
+    "identifiers": [
+      "bg_fEnvReflectionMipCount",
+      "fEmissionFade",
+      "g_fEnvReflectionMipCount",
+      "g_fFogInReflectionsMinDistanceInWorld",
+      "g_fFogInReflectionsMinSmoothness",
+      "g_fFogInReflectionsMinSpecularAlbedo",
+      "g_fIndirectDiffuseEmission",
+      "include/fog_reflection.h",
+      "internal.addFogToReflection",
+      "jg_fEnvReflectionEdgeLength",
+      "jg_fIndirectDiffuseEmission",
+      "vEmission"
+    ]
+  },
+  {
+    "shader": "gpupipe_material.binrfx",
+    "size": 426209,
+    "sha256": "51800b059c3a29b9fc4f9dd1e0bb6f60ebb85a952d8473654b6ffe92ea10708e",
+    "identifiers": [
+      "emission",
+      "emissionMS",
+      "emissionMS0",
+      "emissionMST",
+      "emissionPS",
+      "emissionPST",
+      "emissionVS",
+      "include/emission.h"
+    ]
+  },
+  {
+    "shader": "illuminationvolumelight.binrfx",
+    "size": 520885,
+    "sha256": "f38721b76aed85c09a995ba9b9dac6960fbb2f7e21dce089907830b7fe9a5fe6",
+    "identifiers": [
+      "g_fEnvReflectionEdgeLength",
+      "jg_fEnvReflectionEdgeLength"
+    ]
+  },
+  {
+    "shader": "particlecustomizations.binrfx",
+    "size": 92883,
+    "sha256": "4c19cb2f3879125d7e8821f0eb7aedb20496d61e1f3e963235732a894169dc0e",
+    "identifiers": [
+      "OpaqueDefaultEmission",
+      "VOpaqueDefaultEmissionD",
+      "include/emission.h"
+    ]
+  },
+  {
+    "shader": "fog.binrfx",
+    "size": 68188,
+    "sha256": "a4539b52208ee9363ca2db4dab53eb6359fc1c464a54f6df2fb2f9d5bde22bc9",
+    "identifiers": [
+      "addFogToReflections",
+      "addFogToReflectionsCS",
+      "addFogToReflectionsCSP",
+      "g_fFogInReflectionsMinDistanceInWorld",
+      "g_fFogInReflectionsMinSmoothness",
+      "g_fFogInReflectionsMinSpecularAlbedo",
+      "g_rwtReflection",
+      "g_tReflectionDistance",
+      "include/fog_reflection.h"
+    ]
+  },
+  {
+    "shader": "gameface_ui.binrfx",
+    "size": 153515,
+    "sha256": "5df2672374b448059553b8c3f811665ee7f018b2128762de191bb95a9e1ae790",
+    "identifiers": [
+      "GenerateSDFOutline",
+      "GenerateSDFPS",
+      "GenerateSDFPS8",
+      "GenerateSDFVS",
+      "GenerateSDFVSX",
+      "include/coherent/CohGenerateSDFPS.hlsl",
+      "include/coherent/CohGenerateSDFVS.hlsl"
+    ]
+  },
+  {
+    "shader": "distancefield.binrfx",
+    "size": 176083,
+    "sha256": "a35c1aecf8f5abe4bf503aed49b325a82ffc0b480807e6d556cf11dfdc16c4e3",
+    "identifiers": [
+      "g_fEnvReflectionMipCount",
+      "g_rwtReflectionDistance",
+      "g_rwtReflectionMask",
+      "g_tDebugReflectionDistance",
+      "g_tReflectionDebugSource",
+      "include/sdf_reflections_ray.h"
+    ]
+  },
+  {
+    "shader": "sdfdatacopy.binrfx",
+    "size": 9717,
+    "sha256": "9f7af5a04e854328b1ae09665da02fb51d3ee8c5895ec2e031f9b1d340796a1c",
+    "identifiers": [
+      "g_bSDFDataSource",
+      "g_tSDFDataTarget",
+      "sdfblockdatacopy",
+      "sdfdatacopy",
+      "sdfdatacopy.lua",
+      "sdfdatacopy.rfx"
+    ]
+  },
+  {
+    "shader": "rt_diffusegi_compute.binrfx",
+    "size": 725521,
+    "sha256": "250e758cd65472fa4d9aba628a165e49c698418f6b1390e8754ae5cb49fc8421",
+    "identifiers": [
+      "fEmissionFade",
+      "vEmission"
+    ]
+  },
+  {
+    "shader": "particlemesh.binrfx",
+    "size": 237517,
+    "sha256": "ef4c2d19f6ea7706e0d9e2e3c145dcbfb2ab0bd9ce4f737934c9fb3d6e42f4cf",
+    "identifiers": [
+      "EMISSION",
+      "Emission",
+      "EmissionIntensity",
+      "EmissionMap",
+      "EmissionMultiplier",
+      "OpaqueDefaultEmission",
+      "ZmeshParticleEmissionPSD",
+      "ZmeshParticleEmissionVS",
+      "g_fFogInReflectionsMinDistanceInWorld",
+      "include/emission.h",
+      "meshParticleEmissionPS",
+      "meshParticleEmissionVS"
+    ]
+  },
+  {
+    "shader": "deferredlight.binrfx",
+    "size": 1442214,
+    "sha256": "e55752b27b11fdae0acef2ec3171125e1d8650c01d37c5dde1afc2270fd251b4",
+    "identifiers": [
+      "bg_fEnvReflectionMipCount",
+      "g_fEnvReflectionEdgeLength",
+      "jg_fEnvReflectionEdgeLength"
+    ]
+  },
+  {
+    "shader": "deferredlight_volume.binrfx",
+    "size": 346322,
+    "sha256": "49e965ed6c1db110971e46ad49095a4b9095e0e3c34ab17f55f4a3bdc225eaf4",
+    "identifiers": [
+      "g_fFogInReflectionsMinDistanceInWorld"
+    ]
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "date": "2026-10-03T10:17:25.092488+02:00",
+  "test": "frame-generation-off",
+  "userReport": "frame gen d\u00e9faut identique",
+  "result": "unchanged",
+  "visualVerifiedByUser": true,
+  "gameStopped": false,
+  "nextTest": "SDF Reflections Off, same scene, live menu only"
+}

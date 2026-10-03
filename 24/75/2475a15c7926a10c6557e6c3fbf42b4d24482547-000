@@ -33,6 +33,8 @@ if not baseline.exists():
 original = json.loads(baseline.read_text())
 changes = {key: original[key] for fields in PROFILES.values() for key in fields}
 if args.profile != 'restore':
+    # 3 October 2026: Keep the partial GI improvement while isolating other settings.
+    changes['m_eGIQuality'] = 0
     changes.update(PROFILES[args.profile])
 updated = text
 for key, value in changes.items():
