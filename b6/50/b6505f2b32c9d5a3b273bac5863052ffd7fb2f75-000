@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-03T10:39:05.745659+02:00",
+  "backup": "/Users/zenray/.claude/tmp/tmp-control-resonant-crossover/backups/renderer-before-rt-reset-20261003-103905.json",
+  "changes": {
+    "m_eSSRQuality": {
+      "before": 0,
+      "after": 3
+    },
+    "m_eRTTransparentQuality": {
+      "before": 2,
+      "after": 0
+    },
+    "m_ePTQuality": {
+      "before": 1,
+      "after": 0
+    },
+    "m_eSDFQuality": {
+      "before": 0,
+      "after": 2
+    },
+    "m_eHighQualityPost": {
+      "before": 0,
+      "after": 1
+    }
+  },
+  "allRayTracingZero": true,
+  "gameWasAlreadyExited": true,
+  "otherQualitySource": "original saved high quality baseline",
+  "visualVerification": false
+}
