@@ -1,0 +1,3 @@
+#!/bin/zsh
+# 3 October 2026, 10:03: Always launch from the game directory, never the agent workspace.
+exec /Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine --bottle 'Control Resonant' --workdir 'C:\CONTROL Resonant' --cx-app 'C:\CONTROL Resonant\CONTROLResonant.exe'

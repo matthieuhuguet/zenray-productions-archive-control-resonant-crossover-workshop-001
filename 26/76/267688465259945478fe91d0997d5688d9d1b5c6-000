@@ -1,0 +1,11 @@
+{
+  "profile": "gi-off",
+  "changes": {
+    "m_eGIQuality": {
+      "before": 2,
+      "after": 0
+    }
+  },
+  "settingsVerified": true,
+  "visualVerified": false
+}

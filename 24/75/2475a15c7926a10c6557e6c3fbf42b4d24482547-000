@@ -1,0 +1,53 @@
+# 3 October 2026, 09:58: Reversible, single-variable window rendering experiments.
+import argparse
+import json
+import re
+import subprocess
+from datetime import datetime
+from pathlib import Path
+
+ROOT = Path('/Users/zenray/Library/Application Support/CrossOver/Bottles/Control Resonant')
+SETTINGS = ROOT / 'drive_c/users/crossover/AppData/Local/Remedy/CONTROLResonant/renderer.ini'
+WORKSHOP = Path('/Users/zenray/.claude/tmp/tmp-control-resonant-crossover')
+PROFILES = {
+    'gi-off': {'m_eGIQuality': 0},
+    'sdf-off': {'m_eSDFQuality': 0},
+    'ssr-off': {'m_eSSRQuality': 0},
+    'framegen-off': {'m_eDLSSFGMode': 0, 'm_eFSRFGMode': 0},
+    'hdr-off': {'m_eHdrQuality': 0},
+}
+parser = argparse.ArgumentParser()
+parser.add_argument('profile', choices=['status', 'restore'] + list(PROFILES))
+args = parser.parse_args()
+text = SETTINGS.read_text()
+data = json.loads(text)
+if args.profile == 'status':
+    print(json.dumps({key: data[key] for fields in PROFILES.values() for key in fields}, indent=2))
+    raise SystemExit()
+processes = subprocess.check_output(['ps', '-axo', 'pid,comm'], text=True)
+if any(line.strip().endswith('CONTROLResonant.exe') for line in processes.splitlines()):
+    raise SystemExit('Game is running. Quit normally before changing settings; live settings can overwrite this experiment.')
+baseline = WORKSHOP / 'RendererBaseline.json'
+if not baseline.exists():
+    baseline.write_text(text)
+original = json.loads(baseline.read_text())
+changes = {key: original[key] for fields in PROFILES.values() for key in fields}
+if args.profile != 'restore':
+    changes.update(PROFILES[args.profile])
+updated = text
+for key, value in changes.items():
+    assert key in data
+    updated, count = re.subn(r'("' + re.escape(key) + r'"\s*:\s*)\d+', r'\g<1>' + str(value), updated)
+    assert count == 1, key
+stamp = datetime.now().strftime('%Y%m%d-%H%M%S-%f')
+backups = WORKSHOP / 'backups'
+backups.mkdir(exist_ok=True)
+(backups / (stamp + '-renderer.ini')).write_text(text)
+assert SETTINGS.read_text() == text, 'Settings changed during preparation'
+SETTINGS.write_text(updated)
+result = json.loads(SETTINGS.read_text())
+assert all(result[key] == value for key, value in changes.items())
+assert all(result[key] == data[key] for key in data if key not in changes)
+report = {'profile': args.profile, 'changes': {key: {'before': data[key], 'after': result[key]} for key in changes if data[key] != result[key]}, 'settingsVerified': True, 'visualVerified': False}
+(WORKSHOP / 'CurrentExperiment.json').write_text(json.dumps(report, indent=2))
+print(json.dumps(report, indent=2))
