@@ -1,0 +1,37 @@
+{
+  "archivedAt": "2026-10-04T18:30:35.805106+02:00",
+  "reason": "new-zone-zoe-window-color-bug",
+  "originalCachePath": "/var/folders/r2/wh6ygv490dqbrs2mb51g39jm0000gn/C/d3dm/CONTROLResonant.exe/shaders.cache",
+  "backupCachePath": "/Users/zenray/.claude/tmp/tmp-control-resonant-crossover/backups/cache-archive-20261004-183035/shaders.cache",
+  "fileCount": 5,
+  "totalBytes": 40763492,
+  "files": [
+    {
+      "path": "MTLGPUFamilyApple10_0/bytecode_cache.bin",
+      "bytes": 18415616,
+      "sha256": "644601d0e8d3c6a4e6caba3fb1841857cf4c47a52c103ad44b3065968dad81df"
+    },
+    {
+      "path": "MTLGPUFamilyApple10_0/pipeline_cache.bin",
+      "bytes": 196608,
+      "sha256": "e201a3f51d3f4835ed5bb417fbb3fb7725299d4516fae620696dc767ccc24123"
+    },
+    {
+      "path": "MTLGPUFamilyApple10_0/rootsignature_cache.bin",
+      "bytes": 65536,
+      "sha256": "2b6f2f4a125fc093565a3eb2a61691aab4b8374217cdb505a256346794de443c"
+    },
+    {
+      "path": "MTLGPUFamilyApple10_0/stage_cache.bin",
+      "bytes": 22085632,
+      "sha256": "b382e186de63aced9c75e6b7384c91d7873048b50dd27301c9ea18d29062a71e"
+    },
+    {
+      "path": "MTLGPUFamilyApple10_0/version.bin",
+      "bytes": 100,
+      "sha256": "31fde276380d0bcf0af5dd7a1f58204bd513a07f3cc7529af8ce2b144226e696"
+    }
+  ],
+  "evidenceScreenshot": "/Users/zenray/.claude/tmp/tmp-control-resonant-crossover/Evidence/ZoeAreaWindowsBug-20261004-1830.jpg",
+  "status": "archived-and-cleared-for-rebuild"
+}
