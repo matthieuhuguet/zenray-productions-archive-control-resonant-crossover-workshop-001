@@ -1,0 +1,18 @@
+// 4 October 2026
+// Compare the recorded cloud SHA256 of selected files with the current local bytes.
+// FR : compare l'empreinte cloud enregistrée des fichiers choisis avec les octets locaux actuels.
+import { createHash } from 'node:crypto'
+import { readFile } from 'node:fs/promises'
+import { requestAssets } from '/Users/zenray/Create/Build/Productions/GithubProductions/ZenRayProgress/scripts/Assets/BridgeClient.mjs'
+const [projectId, ...prefixes] = process.argv.slice(2)
+const { project } = await requestAssets({ action: 'status', projectId })
+let ok = 0, bad = 0
+for (const f of (project.files || []).filter((x) => prefixes.some((p) => x.id.includes(p)))) {
+  let local = null
+  try { local = createHash('sha256').update(await readFile(f.localPath)).digest('hex') } catch {}
+  const match = local && local === f.sha256
+  if (match && f.status === 'backed-up') ok++; else { bad++; console.log('MISMATCH', f.id, f.status, f.sha256?.slice(0, 10), local?.slice(0, 10)) }
+}
+console.log(JSON.stringify({ verifiedMatches: ok, mismatches: bad }))
+const f = (project.files || []).find((x) => x.id.endsWith('ConversationArchive/ConversationSummary.md'))
+console.log(JSON.stringify({ id: f.id, status: f.status, size: f.size, backedUpAt: f.backedUpAt, cloudPath: f.cloudPath, manifestPath: f.manifestPath }, null, 1))

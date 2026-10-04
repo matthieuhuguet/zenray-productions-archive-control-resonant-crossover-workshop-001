@@ -1,0 +1,20 @@
+// 4 October 2026
+// Poll the Assets bridge until the selected files are backed up, a job fails, or the time budget ends.
+// FR : interroge le pont Assets jusqu'à la sauvegarde des fichiers choisis, un échec, ou la fin du temps imparti.
+// Usage: node WaitBackup.mjs <project-id> <minutes> <prefix>...
+import { requestAssets } from '/Users/zenray/Create/Build/Productions/GithubProductions/ZenRayProgress/scripts/Assets/BridgeClient.mjs'
+const [projectId, minutes, ...prefixes] = process.argv.slice(2)
+const deadline = Date.now() + Number(minutes) * 60000
+let last = ''
+while (Date.now() < deadline) {
+  const { project } = await requestAssets({ action: 'status', projectId })
+  const chosen = (project.files || []).filter((file) => prefixes.some((prefix) => file.id.includes(prefix)))
+  const byStatus = chosen.reduce((acc, f) => ({ ...acc, [f.status]: (acc[f.status] || 0) + 1 }), {})
+  const jobs = (project.jobs || []).map((job) => `${job.type}:${job.state}${job.error ? ':ERR ' + String(job.error).slice(0, 160) : ''}`).join(' | ')
+  const line = `${new Date().toISOString().slice(11, 19)} selected=${chosen.length} ${JSON.stringify(byStatus)} sync=${project.sync?.state} backedUp=${project.sync?.backedUpCount}/${project.sync?.count} err=${project.sync?.error ? String(project.sync.error).slice(0, 120) : null} jobs=[${jobs}]`
+  if (line !== last) console.log(line)
+  last = line
+  if (chosen.length && chosen.every((f) => f.status === 'backed-up' || f.status === 'verified')) { console.log('ALL SELECTED BACKED UP'); process.exit(0) }
+  await new Promise((resolve) => setTimeout(resolve, 15000))
+}
+console.log('TIME BUDGET ENDED')
