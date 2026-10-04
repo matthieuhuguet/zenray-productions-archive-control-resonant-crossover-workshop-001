@@ -1,0 +1,36 @@
+{
+  "models": {
+    "{'stage': 1, 'major': 6, 'minor': 2}": {
+      "compiled": 78,
+      "requiresRootSignature": 45
+    },
+    "{'stage': 0, 'major': 6, 'minor': 2}": {
+      "compiled": 280,
+      "requiresRootSignature": 40
+    },
+    "{'stage': 5, 'major': 6, 'minor': 5}": {
+      "compiled": 324,
+      "requiresRootSignature": 161
+    },
+    "{'stage': 5, 'major': 6, 'minor': 9}": {
+      "requiresRootSignature": 51
+    },
+    "{'stage': 13, 'major': 6, 'minor': 5}": {
+      "requiresRootSignature": 41,
+      "compiled": 9
+    },
+    "{'stage': 0, 'major': 6, 'minor': 5}": {
+      "requiresRootSignature": 1
+    },
+    "{'stage': 6, 'major': 6, 'minor': 5}": {
+      "requiresRootSignature": 67
+    },
+    "{'stage': 6, 'major': 6, 'minor': 9}": {
+      "requiresRootSignature": 160
+    }
+  },
+  "cacheBytes": 65536,
+  "rootCacheDxbcCount": 10,
+  "rootCacheRts0Count": 10,
+  "embeddedRootSignatures": 0
+}
