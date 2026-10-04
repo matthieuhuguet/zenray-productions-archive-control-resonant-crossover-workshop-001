@@ -1,0 +1,47 @@
+# 4 October 2026
+# Build a contact sheet from the images extracted out of a Codex thread transcript.
+# FR : planche contact des images extraites d'un transcript Codex.
+import glob, os, sys, datetime
+from PIL import Image, ImageDraw, ImageFont
+
+COLUMNS = 5
+CELL_W, CELL_H = 560, 380
+LABEL_H = 44
+GAP = 16
+BACKGROUND = (255, 255, 255)
+INK = (20, 20, 20)
+UTC_OFFSET_HOURS = 2  # Paris summer time on 3-4 October 2026
+
+here = os.path.dirname(os.path.abspath(__file__))
+root = os.path.dirname(here)
+files = sorted(glob.glob(os.path.join(root, 'Images', '*.*')))
+stamps = {}  # idx -> 'HH:MM' local, read from manifest.tsv if present
+manifest = os.path.join(root, 'manifest.tsv')
+if os.path.exists(manifest):
+    for line in open(manifest):
+        idx, ts = line.rstrip('\n').split('\t')[:2]
+        dt = datetime.datetime.fromisoformat(ts.replace('Z', '+00:00')) + datetime.timedelta(hours=UTC_OFFSET_HOURS)
+        stamps[int(idx)] = dt.strftime('%d %b %H:%M')
+
+font_path = next((p for p in ['/Users/zenray/Library/Fonts/InterVariable.ttf', '/Library/Fonts/Arial.ttf'] if os.path.exists(p)), None)
+font = ImageFont.truetype(font_path, 22) if font_path else ImageFont.load_default()
+
+rows = (len(files) + COLUMNS - 1) // COLUMNS
+W = COLUMNS * CELL_W + (COLUMNS + 1) * GAP
+H = rows * (CELL_H + LABEL_H) + (rows + 1) * GAP
+sheet = Image.new('RGB', (W, H), BACKGROUND)
+draw = ImageDraw.Draw(sheet)
+for n, f in enumerate(files):
+    idx = int(os.path.basename(f).split('_')[0])
+    im = Image.open(f).convert('RGB')
+    w0, h0 = im.size
+    im.thumbnail((CELL_W, CELL_H), Image.LANCZOS)
+    c, r = n % COLUMNS, n // COLUMNS
+    x = GAP + c * (CELL_W + GAP)
+    y = GAP + r * (CELL_H + LABEL_H + GAP)
+    sheet.paste(im, (x + (CELL_W - im.width) // 2, y))
+    label = f'{idx:02d}  {stamps.get(idx, "")}  {w0}x{h0}'
+    draw.text((x, y + CELL_H + 10), label, fill=INK, font=font)
+out = os.path.join(root, 'ContactSheet.jpg')
+sheet.save(out, quality=88)
+print(out, sheet.size)

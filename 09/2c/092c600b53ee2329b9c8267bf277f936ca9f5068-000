@@ -1,0 +1,91 @@
+# 4 October 2026
+# Before/after comparison sheet of the CONTROL Resonant window artefact experiments.
+# FR : planche de comparaison des essais sur les fenêtres de CONTROL Resonant.
+import os
+from PIL import Image, ImageDraw, ImageFont
+
+W_CELL, H_CELL = 920, 595
+GAP = 28
+CAPTION_H = 190
+COLUMNS = 3
+BACKGROUND = (255, 255, 255)
+INK = (24, 24, 24)
+MUTED = (110, 110, 110)
+ACCENT = (204, 124, 94)
+TITLE_H = 130
+TMP = os.path.expanduser('~/.claude/tmp/tmp-control-resonant-crossover')
+OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'ComparisonSheet.jpg')
+FONT = '/Users/zenray/Library/Fonts/InterVariable.ttf'
+
+def font(size):
+    try: return ImageFont.truetype(FONT, size)
+    except Exception: return ImageFont.load_default()
+
+panels = [
+    ('1', 'Avant correctif', '3 octobre, 09:50', 'WindowsBefore.png',
+     'Réglages d’origine, ray tracing déjà à 0. Fenêtres vertes et jaunes qui clignotent.', 'défaut'),
+    ('2', 'Illumination globale 2 vers 0', '3 octobre, 10:08', 'WindowsRemainingArtifacts.png',
+     'Première zone corrigée selon Matthieu. La zone suivante garde des bandes cyan et magenta et des fenêtres colorées.', 'partiel'),
+    ('3', 'Génération d’images coupée', '3 octobre, 10:13', 'WindowsFrameGenerationOff.png',
+     'Défaut identique : la lumière colorée des fenêtres se propage au sol et au brouillard.', 'sans effet'),
+    ('4', 'Réflexions SDF coupées', '3 octobre, 10:33', 'WindowsSdfOff.png',
+     'Défaut identique : fenêtres vertes et multicolores, « sdf ne change rien ».', 'sans effet'),
+    ('5', 'Patch D3DMetal et cache reconstruit', '4 octobre, 10:17', 'Evidence/WindowsPartialImprovement-20261004.png',
+     'Moins de fenêtres incorrectes selon Matthieu, défaut restant (teintes violettes et bleues). Scène différente des quatre autres.', 'moins de défauts'),
+]
+tag_color = {'défaut': (192, 57, 43), 'partiel': (211, 145, 40), 'sans effet': (120, 120, 120), 'moins de défauts': (46, 139, 87)}
+
+rows = 2
+W = COLUMNS * W_CELL + (COLUMNS + 1) * GAP
+H = TITLE_H + rows * (H_CELL + CAPTION_H) + (rows + 1) * GAP
+sheet = Image.new('RGB', (W, H), BACKGROUND)
+d = ImageDraw.Draw(sheet)
+d.text((GAP, 34), 'CONTROL Resonant sous CrossOver : fenêtres aux couleurs anormales, essais successifs', fill=INK, font=font(44))
+d.text((GAP, 92), 'Captures de Matthieu, 3 et 4 octobre 2026. Les scènes diffèrent d’une capture à l’autre : la comparaison est qualitative, aucun comptage de fenêtres n’est revendiqué.', fill=MUTED, font=font(26))
+
+def wrap(text, f, width):
+    words, lines, cur = text.split(), [], ''
+    for w in words:
+        t = (cur + ' ' + w).strip()
+        if d.textlength(t, font=f) <= width: cur = t
+        else: lines.append(cur); cur = w
+    if cur: lines.append(cur)
+    return lines
+
+for n, (num, title, when, path, caption, verdict) in enumerate(panels):
+    c, r = n % COLUMNS, n // COLUMNS
+    x = GAP + c * (W_CELL + GAP)
+    y = TITLE_H + GAP + r * (H_CELL + CAPTION_H + GAP)
+    im = Image.open(os.path.join(TMP, path)).convert('RGB')
+    im.thumbnail((W_CELL, H_CELL), Image.LANCZOS)
+    sheet.paste(im, (x, y))
+    cy = y + H_CELL + 14
+    d.text((x, cy), f'{num}  {title}', fill=INK, font=font(30))
+    d.text((x, cy + 40), when, fill=MUTED, font=font(22))
+    tw = d.textlength(verdict, font=font(22))
+    d.rounded_rectangle((x + W_CELL - tw - 28, cy + 36, x + W_CELL, cy + 70), radius=17, fill=tag_color[verdict])
+    d.text((x + W_CELL - tw - 14, cy + 40), verdict, fill=(255, 255, 255), font=font(22))
+    for i, line in enumerate(wrap(caption, font(24), W_CELL)):
+        d.text((x, cy + 84 + i * 32), line, fill=INK, font=font(24))
+
+# sixth cell: reading guide and current state
+x = GAP + 2 * (W_CELL + GAP)
+y = TITLE_H + GAP + 1 * (H_CELL + CAPTION_H + GAP)
+d.rounded_rectangle((x, y, x + W_CELL, y + H_CELL), radius=26, outline=(225, 225, 225), width=3)
+d.text((x + 36, y + 34), 'État au 4 octobre 2026, 10:40', fill=INK, font=font(34))
+lines = [
+    'Correctif complet : non obtenu.',
+    'Illumination globale à 0 : améliore la première zone seulement.',
+    'Génération d’images et réflexions SDF : écartées comme causes uniques.',
+    'D3DMetal explicite, arrondi des écritures de texture, cache reconstruit : moins de défauts, cause non prouvée.',
+    'Hors jeu : 1 257 shaders testés, 8 174 essais, aucune cause identifiée.',
+    'Prochain geste : relancer avec la validation Metal et comparer les mêmes fenêtres.',
+]
+yy = y + 100
+for ln in lines:
+    for i, w in enumerate(wrap(ln, font(27), W_CELL - 100)):
+        d.text((x + 36 + (0 if i == 0 else 22), yy), ('•  ' if i == 0 else '') + w, fill=INK, font=font(27))
+        yy += 38
+    yy += 14
+sheet.save(OUT, quality=88)
+print(OUT, sheet.size)

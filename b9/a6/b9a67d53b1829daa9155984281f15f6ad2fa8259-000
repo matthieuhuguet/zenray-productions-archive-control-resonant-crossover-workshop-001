@@ -1,0 +1,81 @@
+# 4 October 2026
+# Extract a readable, image-free transcript from Codex rollout JSONL files.
+# FR : extrait un transcript lisible, sans images, depuis les fichiers rollout Codex.
+import json, glob, os, re, sys, hashlib, base64, datetime
+
+THREAD = sys.argv[1] if len(sys.argv) > 1 else '01a10095-4b7f-7502-bd33-d3cfc21acd20'
+UTC_OFFSET_HOURS = 2
+TOOL_PREVIEW = 260
+root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+files = sorted(glob.glob(os.path.expanduser(f'~/.codex/sessions/2026/10/*/rollout-*{THREAD}*.jsonl')))
+rx = re.compile(r'data:image/([a-zA-Z0-9.+-]+);base64,([A-Za-z0-9+/=]+)')
+hash_to_idx = {}
+for f in sorted(glob.glob(os.path.join(root, 'Images', '*.*'))):
+    b = os.path.basename(f)
+    idx, h = b.split('_')[0], b.split('_')[1].split('.')[0]
+    hash_to_idx[h] = int(idx)
+
+def local(ts):
+    dt = datetime.datetime.fromisoformat(ts.replace('Z', '+00:00')) + datetime.timedelta(hours=UTC_OFFSET_HOURS)
+    return dt.strftime('%d %B %Y, %H:%M:%S')
+
+def text_of(content):
+    out = []
+    for c in content:
+        t = c.get('type')
+        if t in ('input_text', 'output_text'):
+            out.append(c.get('text', ''))
+        elif t == 'input_image':
+            url = c.get('image_url', '')
+            m = rx.search(url)
+            if m:
+                h = hashlib.sha1(base64.b64decode(m.group(2))).hexdigest()[:10]
+                out.append(f'[IMAGE {hash_to_idx.get(h, "?"):02d}]' if isinstance(hash_to_idx.get(h), int) else f'[IMAGE ?]')
+            else:
+                out.append('[IMAGE]')
+    return '\n'.join(out)
+
+NOISE = ('# AGENTS.md instructions', '<skill>', '<in-app-browser-context', '<external_codex_apps', '<environment_context', '<permissions', '<collaboration_mode', '<turn_aborted', '<user_instructions', '<apps_instructions', '<skills_instructions', '<plugins_instructions', '<personality_spec')
+lines = [f'# Transcript du fil Codex {THREAD}', '', 'Extrait sans images (les images sont repérées [IMAGE nn], voir raw/ et ContactSheet.jpg). Heures en Europe/Paris (UTC+2).', '']
+n_user = n_asst = n_tool = 0
+for f in files:
+    lines += ['', f'## Fichier {os.path.basename(f)}', '']
+    for raw in open(f):
+        try: o = json.loads(raw)
+        except Exception: continue
+        ts = o.get('timestamp', '')
+        p = o.get('payload', {})
+        t = o.get('type')
+        if t == 'response_item' and p.get('type') == 'message':
+            role = p.get('role')
+            txt = text_of(p.get('content', [])).strip()
+            if not txt: continue
+            if role == 'user':
+                # strip injected blocks, keep what the human actually typed
+                txt = re.sub(r'<in-app-browser-context.*?</in-app-browser-context>', '', txt, flags=re.S)
+                txt = re.sub(r'<skill>.*?</skill>', '', txt, flags=re.S)
+                txt = re.sub(r'<external_codex_apps_open_page>.*?</external_codex_apps_open_page>', '', txt, flags=re.S)
+                if '## My request:' in txt and not txt.startswith('# Files mentioned'):
+                    txt = txt.split('## My request:', 1)[1]
+                txt = txt.strip()
+                if not txt or txt.startswith(NOISE) and '[IMAGE' not in txt: continue
+                # keep the human part when noise blocks are glued to a real prompt
+                n_user += 1
+                lines += [f'### PROMPT {n_user} ({local(ts)})', '', txt, '']
+            elif role == 'assistant':
+                n_asst += 1
+                ph = p.get('phase') or 'message'
+                label = 'RÉPONSE FINALE' if ph == 'final_answer' else 'COMMENTAIRE'
+                lines += [f'### {label} ({local(ts)})', '', txt, '']
+        elif t == 'response_item' and p.get('type') in ('custom_tool_call', 'function_call'):
+            n_tool += 1
+            inp = p.get('input') or p.get('arguments') or ''
+            if not isinstance(inp, str): inp = json.dumps(inp, ensure_ascii=False)
+            inp = inp.replace('\n', ' ')[:TOOL_PREVIEW]
+            lines.append(f'- outil ({local(ts)}) `{p.get("name","")}` : {inp}')
+        elif t == 'compacted':
+            lines += ['', f'### COMPACTION ({local(ts)})', '(résumé de compaction, voir le JSONL original)', '']
+lines += ['', f'Totaux : {n_user} prompts humains retenus, {n_asst} messages assistant, {n_tool} appels d\'outils.']
+out = os.path.join(root, 'ConversationTranscript.md')
+open(out, 'w').write('\n'.join(lines))
+print(out, len('\n'.join(lines)), 'chars', n_user, n_asst, n_tool)

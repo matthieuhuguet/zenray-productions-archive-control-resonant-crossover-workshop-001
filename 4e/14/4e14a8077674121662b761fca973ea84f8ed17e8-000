@@ -1,0 +1,15 @@
+// 4 October 2026
+// Archive a selection of project files through the Assets bridge and report their cloud state.
+// FR : archive une sélection de fichiers du projet via le pont Assets et rapporte leur état cloud.
+// Usage: node ArchiveSelection.mjs <project-id> <relative-path-prefix>... [--status-only]
+import { requestAssets } from '/Users/zenray/Create/Build/Productions/GithubProductions/ZenRayProgress/scripts/Assets/BridgeClient.mjs'
+const [projectId, ...rest] = process.argv.slice(2)
+const statusOnly = rest.includes('--status-only')
+const prefixes = rest.filter((value) => value !== '--status-only')
+const inventory = await requestAssets({ action: 'inventory', projectId })
+const files = (await requestAssets({ action: 'status', projectId })).project.files || []
+const chosen = files.filter((file) => prefixes.some((prefix) => (file.relativePath || file.path || '').startsWith(prefix) || file.id.includes(prefix)))
+console.log(JSON.stringify({ total: files.length, selected: chosen.length, byStatus: chosen.reduce((acc, f) => ({ ...acc, [f.status]: (acc[f.status] || 0) + 1 }), {}) }, null, 1))
+if (statusOnly || chosen.length === 0) process.exit(0)
+const response = await requestAssets({ action: 'archive', projectId, fileIds: chosen.map((file) => file.id) })
+console.log(JSON.stringify(response).slice(0, 600))
