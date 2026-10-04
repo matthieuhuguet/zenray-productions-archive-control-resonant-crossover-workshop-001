@@ -1,0 +1,21 @@
+{
+  "phase": "tests-complete",
+  "label": "Tests hors jeu terminés ; diagnostic suivant prêt, correctif incomplet",
+  "completed": 5660,
+  "total": 5660,
+  "gameClosed": true,
+  "visualResult": "Amélioration partielle ; correctif incomplet",
+  "startedAt": 1791102238.266654,
+  "summary": {
+    "tests": 5660,
+    "shaders": 566,
+    "atLeastOneContextCompiled": 284,
+    "errors": {
+      "7": 5210
+    },
+    "exactRuntimeRootMappingKnown": false,
+    "renderValidated": false
+  },
+  "finishedAt": 1791102254.2814631,
+  "nextStep": "Valider les lectures de textures lors du prochain lancement autorisé"
+}

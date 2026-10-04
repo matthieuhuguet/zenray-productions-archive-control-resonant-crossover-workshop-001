@@ -1,0 +1,12 @@
+<!doctype html>
+<!-- 4 October 2026, 10:22 Europe/Paris: progress counts actual offline compiler tests, never visual success. -->
+<html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Control : état des shaders</title>
+<style>
+:root{color-scheme:dark light;--space:24px;--accent:#68b9ad;--surface:light-dark(#fafafa,#171a1c);--ink:light-dark(#25282b,#e9ecee)}
+body{margin:0;background:var(--surface);color:var(--ink);font:16px InterVariable,system-ui,sans-serif;font-weight:400;padding:var(--space)}main{max-width:680px;margin:12vh auto}h1{font-size:24px;font-weight:400}progress{width:100%;height:20px;accent-color:var(--accent)}p{line-height:1.6}#count{font-variant-numeric:tabular-nums}small{opacity:.75}
+</style><main><h1>Control : tests des shaders</h1><p id="phase" role="status" aria-live="polite">Lecture de l’état…</p><progress id="bar" max="1" value="0" aria-label="Tests effectués"></progress><p id="count"></p><p id="result"></p><small id="updated"></small></main>
+<script>
+const elements=Object.fromEntries(['phase','bar','count','result','updated'].map(id=>[id,document.getElementById(id)]));
+async function update(){try{const response=await fetch('/state.json',{cache:'no-store'});if(!response.ok)throw Error(response.status);const state=await response.json();elements.phase.textContent=state.label;elements.bar.max=state.total||1;elements.bar.value=state.completed||0;elements.count.textContent=`${state.completed||0} / ${state.total||0} tests effectués`;elements.result.textContent=`Jeu fermé. ${state.visualResult}.`;elements.updated.textContent=`Actualisé à ${new Date().toLocaleTimeString('fr-FR')}. Fin des tests et correction des fenêtres sont deux états distincts.`;}catch(error){elements.phase.textContent='Suivi indisponible : '+error.message;}}update();setInterval(update,2000);
+</script></html>

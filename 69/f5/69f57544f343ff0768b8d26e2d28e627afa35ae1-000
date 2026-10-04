@@ -1,0 +1,73 @@
+# 4 October 2026, 10:22 Europe/Paris: compare every archived shader offline and publish measured progress.
+import collections
+import concurrent.futures
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import time
+
+ROOT = Path(__file__).resolve().parents[1]
+CONFIG = {
+    'archive': Path('/Users/zenray/Library/Application Support/CrossOver/Bottles/Control Resonant/drive_c/CONTROL Resonant/data/shaders/build/pc_dx12'),
+    'audit': ROOT / 'CompilerProbe/Audit/Audit.json',
+    'probe': ROOT / 'CompilerProbe/ShaderCompileProbe',
+    'converter': Path('/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/lib64/apple_gptk/external/D3DMetal.framework/Versions/A/Resources/libmetalirconverter.dylib'),
+    'output': ROOT / 'CompilerProbe/FullBatch',
+    'status': ROOT / 'Status/state.json',
+    'flags': [447, 511],
+    'workers': 16,
+    'timeout': 30,
+}
+
+def publish(state):
+    path = CONFIG['status']
+    path.parent.mkdir(parents=True, exist_ok=True)
+    pending = path.with_suffix('.pending')
+    pending.write_text(json.dumps(state, ensure_ascii=False, indent=2))
+    pending.replace(path)
+
+def probe(task):
+    source, flag, shader = task
+    target = source.with_suffix(f'.{flag}.metallib')
+    try:
+        result = subprocess.run([str(CONFIG['probe']), str(CONFIG['converter']), str(source), str(flag), str(target)], capture_output=True, text=True, timeout=CONFIG['timeout'])
+        try:
+            details = json.loads(result.stdout)
+        except ValueError:
+            details = {'compiled': False, 'diagnostic': result.stdout[-500:]}
+        return {'shader': shader, 'flags': flag, 'exitCode': result.returncode, **details, 'stderr': result.stderr[-1000:], 'outputSha256': hashlib.sha256(target.read_bytes()).hexdigest() if target.exists() else None}
+    except subprocess.TimeoutExpired:
+        return {'shader': shader, 'flags': flag, 'compiled': False, 'timeout': True}
+
+def main():
+    running = subprocess.check_output(['ps', '-axo', 'comm'], text=True)
+    if any(line.strip().endswith('CONTROLResonant.exe') for line in running.splitlines()):
+        raise SystemExit('Game must be closed for this offline batch.')
+    audit = json.loads(CONFIG['audit'].read_text())
+    CONFIG['output'].mkdir(parents=True, exist_ok=True)
+    tasks = []
+    for item in audit['containers']:
+        data = (CONFIG['archive'] / item['file']).read_bytes()
+        name = f"{Path(item['file']).stem}-{item['offset']}"
+        source = CONFIG['output'] / f'{name}.dxil'
+        source.write_bytes(data[item['offset']:item['offset'] + item['size']])
+        tasks.extend((source, flag, name) for flag in CONFIG['flags'])
+    state = {'phase': 'running', 'label': 'Comparaison du compilateur Apple', 'completed': 0, 'total': len(tasks), 'gameClosed': True, 'visualResult': 'Amélioration partielle, fenêtres encore incorrectes', 'startedAt': time.time()}
+    publish(state)
+    results = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=CONFIG['workers']) as pool:
+        for item in pool.map(probe, tasks):
+            results.append(item)
+            state['completed'] = len(results)
+            state['compiled'] = sum(x.get('compiled', False) for x in results)
+            publish(state)
+    unchanged = all(hashlib.sha256((CONFIG['archive'] / item['name']).read_bytes()).hexdigest() == item['sha256'] for item in audit['files'])
+    summary = {'tests': len(results), 'compiled': state['compiled'], 'errors': dict(collections.Counter(str(x.get('errorCode', 'other')) for x in results if not x.get('compiled'))), 'originalArchivesUnchanged': unchanged, 'renderValidated': False}
+    (CONFIG['output'] / 'Results.json').write_text(json.dumps({'summary': summary, 'results': results}, indent=2))
+    state.update(phase='tests-complete', label='Tests hors jeu terminés ; correctif visuel encore en recherche', summary=summary, finishedAt=time.time())
+    publish(state)
+    print(json.dumps(summary))
+
+if __name__ == '__main__':
+    main()

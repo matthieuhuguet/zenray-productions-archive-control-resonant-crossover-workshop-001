@@ -1,0 +1,35 @@
+{
+  "recordedAt": "2026-10-04T10:14:48.278434+02:00",
+  "pid": 83794,
+  "environment": {
+    "CX_GRAPHICS_BACKEND": null,
+    "D3DM_FORCE_RTZ_TEXWRITE": null
+  },
+  "d3dMetalLoaded": true,
+  "cacheFiles": [
+    {
+      "path": "MTLGPUFamilyApple10_0/bytecode_cache.bin",
+      "bytes": 18350080
+    },
+    {
+      "path": "MTLGPUFamilyApple10_0/rootsignature_cache.bin",
+      "bytes": 65536
+    },
+    {
+      "path": "MTLGPUFamilyApple10_0/stage_cache.bin",
+      "bytes": 21626880
+    },
+    {
+      "path": "MTLGPUFamilyApple10_0/pipeline_cache.bin",
+      "bytes": 196608
+    },
+    {
+      "path": "MTLGPUFamilyApple10_0/version.bin",
+      "bytes": 100
+    }
+  ],
+  "cacheBytes": 40239204,
+  "windowRenderingValidated": false,
+  "resonanceHistoricalResult": "29 August 2026: SM6.6 gate patch plus PSO cache rebuild, 766 old files archived, 303 new files in two minutes, user confirmed corruption gone",
+  "environmentInspection": "Unavailable: macOS ps returned no environment, including PATH; null does not prove variables absent."
+}

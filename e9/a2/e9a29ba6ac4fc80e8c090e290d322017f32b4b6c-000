@@ -4,6 +4,17 @@
 #include <stdint.h>
 #include <dlfcn.h>
 
+// 4 October 2026, 10:35 Europe/Paris: D3DMetal logs this converter's error payload as a C string.
+static void print_json_string(const char *value) {
+    putchar('"');
+    if (value) for (const unsigned char *p = (const unsigned char *)value; *p; ++p) {
+        if (*p == '"' || *p == '\\') printf("\\%c", *p);
+        else if (*p < 32) printf("\\u%04x", *p);
+        else putchar(*p);
+    }
+    putchar('"');
+}
+
 int main(int argc, char **argv) {
     if (argc < 3 || argc > 5) return 64;
     void *library = dlopen(argv[1], RTLD_NOW | RTLD_LOCAL);
@@ -14,6 +25,7 @@ int main(int argc, char **argv) {
     void (*validate)(void *, unsigned) = dlsym(library, "IRCompilerSetValidationFlags");
     void (*compatibility)(void *, unsigned) = dlsym(library, "IRCompilerSetCompatibilityFlags");
     unsigned (*error_code)(void *) = dlsym(library, "IRErrorGetCode");
+    const char *(*error_payload)(void *) = dlsym(library, "IRErrorGetPayload");
     void (*destroy_object)(void *) = dlsym(library, "IRObjectDestroy");
     void (*destroy_compiler)(void *) = dlsym(library, "IRCompilerDestroy");
     void (*destroy_error)(void *) = dlsym(library, "IRErrorDestroy");
@@ -45,8 +57,10 @@ int main(int argc, char **argv) {
         if (!target || fwrite(bytes, 1, size, target) != size) return 71;
         fclose(target); free(bytes); binary_destroy(binary);
     }
-    printf("{\"parsed\":true,\"compiled\":%s,\"errorCode\":%u}\n",
+    printf("{\"parsed\":true,\"compiled\":%s,\"errorCode\":%u,\"errorMessage\":",
         output ? "true" : "false", error ? error_code(error) : 0);
+    print_json_string(error && error_payload ? error_payload(error) : "");
+    puts("}");
     if (output) destroy_object(output);
     if (error) destroy_error(error);
     destroy_object(input); destroy_compiler(compiler); free(data);

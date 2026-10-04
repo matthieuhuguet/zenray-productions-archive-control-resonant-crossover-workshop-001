@@ -1,0 +1,59 @@
+# 4 October 2026, 10:30 Europe/Paris: use real cached root descriptions in disposable offline copies; mapping remains unknown.
+import collections
+import concurrent.futures
+import json
+from pathlib import Path
+import struct
+import time
+from BatchShaderProbe import CONFIG, probe, publish
+
+ROOT = Path(__file__).resolve().parents[1]
+DIRECTORY = ROOT / 'CompilerProbe/RootContext'
+
+def attach_root(source, root_chunk):
+    count = struct.unpack_from('<I', source, 28)[0]
+    chunks = []
+    for index in range(count):
+        offset = struct.unpack_from('<I', source, 32 + 4 * index)[0]
+        length = struct.unpack_from('<I', source, offset + 4)[0]
+        chunks.append(source[offset:offset + 8 + length])
+    chunks.append(root_chunk)
+    header = bytearray(source[:32])
+    header[4:20] = bytes(16)
+    offset = 32 + 4 * len(chunks)
+    offsets = []
+    for chunk in chunks:
+        offsets.append(offset)
+        offset += len(chunk)
+    struct.pack_into('<II', header, 24, offset, len(chunks))
+    return header + struct.pack('<' + 'I' * len(offsets), *offsets) + b''.join(chunks)
+
+def main():
+    comparison = json.loads((ROOT / 'CompilerProbe/FullBatch/Comparison.json').read_text())
+    roots = sorted(DIRECTORY.glob('Root-*.chunk'))
+    tasks = []
+    for name in comparison['requiresContextShaders']:
+        source = (ROOT / 'CompilerProbe/FullBatch' / (name + '.dxil')).read_bytes()
+        for root in roots:
+            target = DIRECTORY / (name + '-' + root.stem + '.dxil')
+            target.write_bytes(attach_root(source, root.read_bytes()))
+            tasks.append((target, 511, name + '-' + root.stem))
+    state = {'phase': 'running', 'label': 'Instructions shader : essais avec les liaisons trouvées dans le cache', 'completed': 0, 'total': len(tasks), 'gameClosed': True, 'visualResult': 'Amélioration partielle ; correctif incomplet', 'startedAt': time.time()}
+    publish(state)
+    results = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=CONFIG['workers']) as pool:
+        for result in pool.map(probe, tasks):
+            results.append(result)
+            state.update(completed=len(results))
+            publish(state)
+    groups = collections.defaultdict(list)
+    for result in results:
+        groups[result['shader'].rsplit('-Root-', 1)[0]].append(result)
+    summary = {'tests':len(results), 'shaders':len(groups), 'atLeastOneContextCompiled':sum(any(x.get('compiled') for x in group) for group in groups.values()), 'unsupportedInstructionInEveryContext':[name for name, group in groups.items() if all(x.get('errorCode') == 7 for x in group)], 'errors':dict(collections.Counter(str(x.get('errorCode')) for x in results if not x.get('compiled'))), 'exactRuntimeRootMappingKnown':False, 'renderValidated':False}
+    (DIRECTORY / 'Results.json').write_text(json.dumps({'summary':summary,'results':results},indent=2))
+    state.update(phase='tests-complete', label='Tests terminés ; analyse des incompatibilités, correctif incomplet', summary={k:v for k,v in summary.items() if not isinstance(v,list)},finishedAt=time.time())
+    publish(state)
+    print(json.dumps(state['summary']))
+
+if __name__ == '__main__':
+    main()

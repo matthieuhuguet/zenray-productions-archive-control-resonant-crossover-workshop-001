@@ -1,0 +1,9 @@
+{
+  "date": "4 October 2026",
+  "userReport": "certaines fenetres sont encore bug mais moins que tout a l heure",
+  "source": "/Users/zenray/Desktop/Screenshot 2026-10-04 at 10.17.46.png",
+  "evidence": "/Users/zenray/.claude/tmp/tmp-control-resonant-crossover/Evidence/WindowsPartialImprovement-20261004.png",
+  "sha256": "a479cbd0e0015cd03a3512b3db4505b88e178f3ebba468989faffb666521fd1f",
+  "completeFix": false,
+  "sameSceneControlledComparison": false
+}
