@@ -1,0 +1,107 @@
+# Résumé du fil Codex « Quitter les autres programmes » (4 October 2026)
+
+Fil Codex `01a10095-4b7f-7502-bd33-d3cfc21acd20`, projet Assets `control-resonant-crossover`, du 3 octobre 2026 à 09:06 au 4 octobre 2026 à 10:40 (heures de Paris). Résumé établi le 4 October 2026 par Claude Code, à partir des deux fichiers `rollout-*.jsonl` de Codex lus jusqu'à leur dernière ligne. (4 October 2026)
+
+## Ce que le fil contient (4 October 2026)
+
+- 26 prompts de Matthieu, 53 messages de l'assistant, 129 appels d'outils, 10 images distinctes, 2 compactions de contexte. Le texte intégral figure dans `ConversationTranscript.md`, les images dans `Images/`. (4 October 2026)
+- Le fil s'arrête à 10:40:43 sur une erreur de quota Codex (« You've hit your usage limit »), alors que l'agent venait de commencer l'archivage demandé au dernier prompt : aucun document d'archive n'avait encore été écrit par Codex. (4 October 2026)
+- La reprise a été faite par Claude Code, qui a lu le fil jusqu'au bout et produit ce dossier. (4 October 2026)
+
+## Déroulé en neuf temps (4 October 2026)
+
+| Temps | Heure | Ce qui se passe |
+|---|---|---|
+| 1. Outils du Mac | 3 oct., 09:06 à 09:12 | Fermeture de treize applications sauf CrossOver et ChatGPT, puis création des skills `quit-programs` et `toggle-sleep`. `SleepDisabled` passe de 1 à 0. |
+| 2. Ray tracing | 09:31 à 09:40 | Les huit réglages RT et PT de `renderer.ini` sont mis à 0 (copie de l'original conservée), puis remis à 0 après un clic malencontreux de Matthieu dans les options. |
+| 3. Fenêtres vertes | 09:52 à 10:00 | Recherche web puis premier essai : `m_eGIQuality` de 2 à 0. Le lancement en ligne de commande échoue (« Data is missing! ») faute de dossier de travail, corrigé par `--workdir`. Matthieu constate que les fenêtres ne font plus de pops. Skill `control-resonant-window-fix` créé. |
+| 4. Limite du correctif | 10:00 à 10:24 | Réponse r/macgaming préparée, puis nouvelle capture dans une autre zone : le défaut persiste. Le skill est corrigé en « amélioration partielle ». Génération d'images coupée : défaut identique. |
+| 5. Parenthèse herbe | 10:25 à 10:27 | Question hors sujet sur une herbe dense Houdini vers Unreal, traitée avec le skill `zenray-houdini`. |
+| 6. Réflexions SDF et retour | 10:33 à 10:40 | SDF coupé : « sdf ne change rien ». Nouveau clic malencontreux, ray tracing remis à 0 et le reste restauré au maximum. |
+| 7. Hypothèse shaders | 15:06 à 15:20 | Matthieu soupçonne la compilation des shaders par DirectX 12 / D3DMetal. Audit hors jeu : 1 257 conteneurs de shaders sans défaut de structure, cinq compilables isolément, l'option `D3DM_FORCE_RTZ_TEXWRITE` change le code Metal de quatre. Patch expérimental appliqué dans la bottle, ancien cache archivé, retour arrière testé. |
+| 8. Cache reconstruit | 4 oct., 10:09 à 10:28 | Retrouvé dans le journal : la manipulation du 29 août sur Resonance (seuil Shader Model, cache de 766 à 303 fichiers). Control est lancé, son cache D3DMetal se reconstruit (40 Mo). Matthieu : moins de fenêtres incorrectes, mais certaines restent. Jeu fermé à sa demande, 8 174 essais hors jeu, barre d'état locale créée. |
+| 9. Demande d'archivage | 10:39 | Matthieu demande de tout documenter, d'archiver via Assets V2 avec prompts, essais et protocole, et de produire une planche de comparaison. Codex atteint son quota à 10:40. |
+
+## Les essais et leurs résultats (4 October 2026)
+
+| Essai | Résultat observé | Preuve conservée |
+|---|---|---|
+| Ray tracing et path tracing à 0 | Sans effet sur les fenêtres : défaut déjà présent à 0 | `RendererBaseline.json` |
+| Illumination globale 2 vers 0 | Première zone corrigée, défaut ailleurs : partiel | `GiOffUserConfirmedProof.json`, `PartialFixCorrection.json` |
+| Génération d'images coupée | Défaut identique | `FrameGenerationOffEvidence.json` |
+| Réflexions SDF coupées | Défaut identique | `SdfOffEvidence.json` |
+| D3DMetal explicite, `D3DM_FORCE_RTZ_TEXWRITE=1`, ancien cache archivé | Effet visuel non constaté sur le moment ; code Metal modifié pour 4 shaders sur 5 testables | `ShaderCompatibilityPatch.json`, `ShaderCompatibilityRollbackTest.json` |
+| Cache reconstruit au lancement | Moins de fenêtres incorrectes selon Matthieu, scène différente, défaut restant | `ShaderRebuildLaunchProof.json`, `Evidence/WindowsPartialImprovement-20261004.png` |
+| Tests hors jeu sur 1 257 shaders | 691 compilent dans deux modes, 566 exigent une description de liaison ; avec dix descriptions réelles, 284 compilent, 282 échouent. Cause non identifiée | `OfflineShaderCompatibilityReport.md`, `CompilerProbe/` |
+
+## Protocole de travail qui s'est dégagé (4 October 2026)
+
+- Une seule variable à la fois, sauvegarde de l'original avant toute écriture, retour arrière testé. (4 October 2026)
+- Aucune affirmation visuelle sans constat de Matthieu : une valeur à zéro ou un processus actif ne prouve pas le rendu. (4 October 2026)
+- Le jeu reste ouvert quand Matthieu le demande ; il est fermé et les tests se font hors jeu quand il le demande. (4 October 2026)
+- Le skill est corrigé dès qu'un résultat le contredit (le correctif GI est passé de « confirmé » à « partiel »). (4 October 2026)
+- Les témoignages trouvés en ligne restent des indices, jamais des preuves pour ce cas. (4 October 2026)
+
+## Résultat à la fin du fil (4 October 2026)
+
+- Le correctif complet n'est pas obtenu. Trois options sont écartées comme causes uniques (ray tracing, génération d'images, réflexions SDF). L'illumination globale à 0 améliore une zone, et le couple D3DMetal explicite plus cache reconstruit réduit les défauts selon Matthieu, sans que la cause soit prouvée. (4 October 2026)
+- Prochain geste préparé : `Scripts/LaunchControlValidation.sh`, qui active la validation Metal pour relancer le jeu, puis comparer les mêmes fenêtres. Il n'a jamais été exécuté. (4 October 2026)
+- Hypothèse la plus plausible mais non démontrée : lecture de textures ou de ressources liées au mauvais contexte, ce qu'Apple décrit comme source de couleurs incorrectes sans échec de compilation. (4 October 2026)
+
+## Correspondance des images (4 October 2026)
+
+| N° | Contenu | Où la retrouver |
+|---|---|---|
+| 01 | Avant correctif, fenêtres vertes et jaunes | `WindowsBefore.png` |
+| 02 | Panneau CrossOver de la bouteille, vu par l'agent | `Images/` |
+| 03 | Erreur « Data is missing! » | `Images/` |
+| 04 | Zone de Zoe, bandes cyan et magenta après GI à 0 | `WindowsRemainingArtifacts.png` |
+| 05 | Génération d'images coupée, défaut identique | `WindowsFrameGenerationOff.png` |
+| 06 | Menu Options, SDF sur High | `Images/` |
+| 07 | Référence d'herbe pour la question Houdini | `Images/` |
+| 08 | SDF coupé, défaut identique | `WindowsSdfOff.png` |
+| 09 | Menu Graphics avec fenêtre d'erreur Wine | `Images/` |
+| 10 | Amélioration partielle du 4 octobre | `Evidence/WindowsPartialImprovement-20261004.png` |
+
+La planche `ComparisonSheet.jpg` rapproche les captures 01, 04, 05, 08 et 10 avec leur verdict. Les scènes diffèrent d'une capture à l'autre : la comparaison est qualitative. `ContactSheet.jpg` montre les dix images brutes. (4 October 2026)
+
+## Tous les prompts de Matthieu (4 October 2026)
+
+Texte intégral dans `ConversationTranscript.md`. (4 October 2026)
+
+| N° | Heure | Prompt (abrégé) |
+|---|---|---|
+| 1 | 03 oct., 09:06 | quitte tout les programmes sauf crossover et chatgpt go très rapidement |
+| 2 | 03 oct., 09:07 | crée un skill pour ça en fonction de x contrainte très court tu a été parfait quit-programs ou nom parlant |
+| 3 | 03 oct., 09:11 | désactive le mode power always on du mac ... comme ça si je ferme le clapet il ira sur mon autre écran sans consommer right ... ? ou sinon il étein... |
+| 4 | 03 oct., 09:12 | Parfait crée un skill toggle ... avec feedback sur l'état actuel go skill court |
+| 5 | 03 oct., 09:31 | sur crosshover bottle '/Users/zenray/Library/Application Support/CrossOver/Bottles/Control Resonant/drive_c/CONTROL Resonant/CONTROLResonant.exe' t... |
+| 6 | 03 oct., 09:40 | recommence j'ai miss click dans les params du jeu |
+| 7 | 03 oct., 09:52 | les shaders des fenêtres dans control resonant sont mal affichés display et font des pops de couleurs bizarres peut tu trouver un correctif et le d... |
+| 8 | 03 oct., 09:54 | continue |
+| 9 | 03 oct., 09:56 | [réponse à une question posée par Codex : « Le jeu ne démarre pas »] |
+| 10 | 03 oct., 09:56 | [capture jointe] |
+| 11 | 03 oct., 09:58 | Wtf ça fonctionne comment tu as fait et tu as fait quoi ? les fenetres ne font plus de pop save dans un skill ce que tu as fait ... |
+| 12 | 03 oct., 10:00 | comment tu expliques que tu aies essayé ça et qu'est ce que ça change ? |
+| 13 | 03 oct., 10:04 | trouve le forum reddit qui parlait de ce bug je vais me log et donner la réponse prépare aussi la réponse /macgaming |
+| 14 | 03 oct., 10:08 | ça marche pas partout malheureusement creuse des pistes sans fermer le jeu stp : [capture jointe] |
+| 15 | 03 oct., 10:13 | frame gen défaut identique [capture jointe] |
+| 16 | 03 oct., 10:23 | c'est ou SDF reflections ? |
+| 17 | 03 oct., 10:24 | ? ici ? je vais tenter mais je ne suis plus dans une zone de fenetres malheureusement [capture jointe] |
+| 18 | 03 oct., 10:25 | [$zenray-houdini](/Users/zenray/.codex/skills/zenray-houdini/SKILL.md) je me demande comment faire cette grass sur houdini / unreal pour que ce soi... |
+| 19 | 03 oct., 10:27 | Tu penses vraiment que c'est des meshes et pas des textures ? cela dit c'est possible en soit ... |
+| 20 | 03 oct., 10:33 | sdf ne change rien ... [capture jointe] |
+| 21 | 03 oct., 10:37 | remet les param de lighting ray tracing à 0 j'ai miss click : le reste remet à fond [capture jointe] |
+| 22 | 03 oct., 15:06 | Le jeu est fermé, donc tu peux essayer de faire tous les tests que tu veux sans lancer le jeu, s'il te plaît. Mais je pense qu'il doit s'agir d'un... |
+| 23 | 04 oct., 10:09 | [$progress](/Users/zenray/.codex/skills/progress/SKILL.md) Dans le même style, je me rappelle que pour Plague Tale: Innocent, normalement tu peux v... |
+| 24 | 04 oct., 10:09 | [$progress](/Users/zenray/.codex/skills/progress/SKILL.md) Dans le même style, je me rappelle que pour Plague Tale: Innocent, normalement tu peux v... |
+| 25 | 04 oct., 10:18 | Comment tu fais pour reconstruire un cache je comprends pas ? continue en parallèle le travail ... crée une barre de status pour me dire quand c'es... |
+| 26 | 04 oct., 10:39 | Incroyable les fenetres save toutes la documentation notamment depuis le début ... et puis archive [$zenray-assets-v2](/Users/zenray/.codex/skills/... |
+
+Les prompts 9 et 10 forment la réponse de Matthieu à une question posée par Codex (la réponse « Le jeu ne démarre pas », puis la capture de l'erreur). Le prompt 23 est renvoyé en 24 avec la précision « Non plague tale resonance ». (4 October 2026)
+
+## Limites de ce résumé (4 October 2026)
+
+- Il repose sur le texte du fil et sur les fichiers de preuve du projet ; les captures ont été regardées par Claude Code, pas mesurées. (4 October 2026)
+- Les deux compactions de contexte de Codex sont conservées dans les JSONL originaux, non recopiées ici. (4 October 2026)
+- Le fil Codex original reste la source complète : il est copié par la bibliothèque `agent-conversations` d'Assets, dont l'archive cloud a un état à vérifier. (4 October 2026)
