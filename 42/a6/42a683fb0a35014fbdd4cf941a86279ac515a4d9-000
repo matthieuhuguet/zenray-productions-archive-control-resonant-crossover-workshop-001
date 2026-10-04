@@ -1,0 +1,72 @@
+[
+  {
+    "family": "deferredlight_volume",
+    "shader": "deferredlight_volume-108233",
+    "exitCode": 3,
+    "result": "{\"parsed\":true,\"compiled\":false,\"errorCode\":7,\"errorMessage\":\"IR contains unsupported instruction: \\\"dx.op.createHandle\\\". \"}\n",
+    "stderr": ""
+  },
+  {
+    "family": "gpupipe_transparent",
+    "shader": "gpupipe_transparent-138067",
+    "exitCode": 3,
+    "result": "{\"parsed\":true,\"compiled\":false,\"errorCode\":7,\"errorMessage\":\"IR contains unsupported instruction: \\\"dx.op.createHandle\\\". \"}\n",
+    "stderr": ""
+  },
+  {
+    "family": "rt_debug_renderer",
+    "shader": "rt_debug_renderer-70",
+    "exitCode": 3,
+    "result": "{\"parsed\":true,\"compiled\":false,\"errorCode\":7,\"errorMessage\":\"IR contains unsupported instruction: \\\"dx.op.createHandle\\\". \"}\n",
+    "stderr": ""
+  },
+  {
+    "family": "rt_direct_lighting",
+    "shader": "rt_direct_lighting-62",
+    "exitCode": 3,
+    "result": "{\"parsed\":true,\"compiled\":false,\"errorCode\":7,\"errorMessage\":\"IR contains unsupported instruction: \\\"dx.op.createHandleForLib.class.StructuredBuffer<MaterialDataPart_Global>\\\". \"}\n",
+    "stderr": ""
+  },
+  {
+    "family": "rt_pathtracing",
+    "shader": "rt_pathtracing-1100790",
+    "exitCode": 3,
+    "result": "{\"parsed\":true,\"compiled\":false,\"errorCode\":7,\"errorMessage\":\"IR contains unsupported instruction: \\\"dx.op.createHandleForLib.dx.types.Handle\\\". \"}\n",
+    "stderr": ""
+  },
+  {
+    "family": "rt_reflection_compute",
+    "shader": "rt_reflection_compute-1422245",
+    "exitCode": 3,
+    "result": "{\"parsed\":true,\"compiled\":false,\"errorCode\":7,\"errorMessage\":\"IR contains unsupported instruction: \\\"dx.op.createHandle\\\". \"}\n",
+    "stderr": ""
+  },
+  {
+    "family": "rt_restir_shading_compute",
+    "shader": "rt_restir_shading_compute-101718",
+    "exitCode": 3,
+    "result": "{\"parsed\":true,\"compiled\":false,\"errorCode\":7,\"errorMessage\":\"IR contains unsupported instruction: \\\"dx.op.createHandleFromBinding\\\". \"}\n",
+    "stderr": ""
+  },
+  {
+    "family": "rt_restir_temporal_compute",
+    "shader": "rt_restir_temporal_compute-263053",
+    "exitCode": 3,
+    "result": "{\"parsed\":true,\"compiled\":false,\"errorCode\":7,\"errorMessage\":\"IR contains unsupported instruction: \\\"dx.op.createHandleFromBinding\\\". \"}\n",
+    "stderr": ""
+  },
+  {
+    "family": "rt_transparent_compute",
+    "shader": "rt_transparent_compute-1892553",
+    "exitCode": 3,
+    "result": "{\"parsed\":true,\"compiled\":false,\"errorCode\":7,\"errorMessage\":\"IR contains unsupported instruction: \\\"dx.op.createHandleFromBinding\\\". \"}\n",
+    "stderr": ""
+  },
+  {
+    "family": "rt_transparent_pt",
+    "shader": "rt_transparent_pt-318329",
+    "exitCode": 3,
+    "result": "{\"parsed\":true,\"compiled\":false,\"errorCode\":7,\"errorMessage\":\"IR contains unsupported instruction: \\\"dx.op.createHandleForLib.dx.types.Handle\\\". \"}\n",
+    "stderr": ""
+  }
+]
